@@ -3,11 +3,12 @@ import {Toggle} from '@base-ui/react/toggle'
 import styles from './where-we-cook.module.css';
 import alchemyTableImg from '../../assets/AkhemyTable.png';
 import alchemistSuppliesImg from '../../assets/AlchemistSupplies.png';
-import {usePotion, FIELD_INSTRUMENTS, STATION} from "../../contexts/PotionContext.jsx";
+import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
+import {FIELD_INSTRUMENTS, STATION} from "../../static/static.js";
 
 
 export default function WhereWeCook() {
-    const {whereWeCook, setWhereWeCook} = usePotion()
+    const {whereWeCook, setWhereWeCook} = usePotionBrew()
     const isStation = whereWeCook === STATION
 
     function handleWhereWeCookChange(groupValue) {

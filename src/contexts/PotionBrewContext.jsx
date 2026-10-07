@@ -1,12 +1,10 @@
 import {createContext, useContext, useReducer} from "react";
-
-const FIELD_INSTRUMENTS = 'fieldInstruments'
-const STATION = 'station'
+import {FIELD_INSTRUMENTS} from "../static/static.js";
 
 const ACTION_BASE_CHANGED = 'base/changed'
 const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
 
-const PotionContext = createContext()
+const PotionBrewContext = createContext()
 
 const initialState = {
     whereWeCook: FIELD_INSTRUMENTS,
@@ -31,7 +29,7 @@ function reducer(state, action){
     }
 }
 
-function PotionProvider({children}) {
+function PotionBrewProvider({children}) {
     const [{whereWeCook, base, ingredients, distill, difficulty}, dispatch] = useReducer(reducer, initialState)
 
     function setWhereWeCook(newWhereWeCook) {
@@ -41,7 +39,7 @@ function PotionProvider({children}) {
     }
 
     return (
-        <PotionContext.Provider
+        <PotionBrewContext.Provider
             value={{
                 whereWeCook,
                 base,
@@ -52,14 +50,14 @@ function PotionProvider({children}) {
             }}
         >
             {children}
-        </PotionContext.Provider>
+        </PotionBrewContext.Provider>
     )
 }
 
-function usePotion() {
-    const context = useContext(PotionContext)
+function usePotionBrew() {
+    const context = useContext(PotionBrewContext)
     if(context === undefined) throw new Error('Context used outside of PotionProvider')
     return context
 }
 
-export {PotionProvider, usePotion, FIELD_INSTRUMENTS, STATION}
+export {PotionBrewProvider, usePotionBrew}

@@ -5,7 +5,7 @@ import Distill from "./components/Distill.jsx";
 import Difficulty from "./components/Difficulty.jsx";
 import AlchemicalResult from "./components/AlchemicalResult.jsx";
 import Base from "./components/Base.jsx";
-import {PotionProvider} from "./contexts/PotionContext.jsx";
+import {PotionBrewProvider} from "./contexts/PotionBrewContext.jsx";
 
 function App() {
 
@@ -14,14 +14,14 @@ function App() {
 
       <Header />
         <div className='brew'>
-            <PotionProvider>
+            <PotionBrewProvider>
                 <WhereWeCook />
                 <Base />
                 <Ingredients />
                 <Distill />
                 <Difficulty />
                 <AlchemicalResult />
-            </PotionProvider>
+            </PotionBrewProvider>
         </div>
     </div>
   )
