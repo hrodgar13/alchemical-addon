@@ -58,7 +58,7 @@ function PotionComponentProvider({children}) {
         ingredientRarities,
         brewedPotions,
         isLoading,
-        error
+        errors
     }, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
@@ -71,7 +71,7 @@ function PotionComponentProvider({children}) {
                 const data = BASES
                 dispatch({type: BASE_LOADED, payload: data})
             } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Bases: ${err.error.message}`})
+                dispatch({type: ERROR, payload: `An Error occurred while fetching Bases: ${err.message}`})
             }
         }
 
@@ -81,7 +81,7 @@ function PotionComponentProvider({children}) {
                 const data = MOCK_INGREDIENTS
                 dispatch({type: INGREDIENTS_LOADED, payload: data})
             } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Ingredients: ${err.error.message}`})
+                dispatch({type: ERROR, payload: `An Error occurred while fetching Ingredients: ${err.message}`})
             }
         }
 
@@ -91,7 +91,7 @@ function PotionComponentProvider({children}) {
                 const data = BREWED_POTIONS
                 dispatch({type: BREWED_POTIONS_LOADED, payload: data})
             } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Brewed potions: ${err.error.message}`})
+                dispatch({type: ERROR, payload: `An Error occurred while fetching Brewed potions: ${err.message}`})
             }
         }
 
