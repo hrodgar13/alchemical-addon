@@ -103,3 +103,29 @@ button:focus-visible {
     border-radius: 100%;
     text-align: center;
 }
+
+.brew {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.base, .alchemical-result, .distill, .ingredients, .where-we-cook, .difficulty {
+    border: 1px solid black;
+}
+
+.base {
+
+}
+
+.ingredients {
+    grid-column: 2/4;
+    grid-row: 2/4;
+}
+
+.difficulty {
+    grid-column: 1/4;
+}
+
+.alchemical-result {
+    grid-column: 1/4;
+}

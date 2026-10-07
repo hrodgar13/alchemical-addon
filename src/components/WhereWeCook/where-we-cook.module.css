@@ -1,0 +1,102 @@
+.WhereWeCook {
+    grid-column: 1/4;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px
+}
+
+.Title {
+    font-size: 48px;
+}
+
+.Group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.Option {
+    background: none;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--color-text-muted);
+    cursor: pointer;
+
+    &[data-pressed] {
+        color: var(--color-text);
+    }
+
+    &:hover {
+        color: var(--color-text);
+    }
+}
+
+.Track {
+    --switch-width: 200px;
+    --switch-height: 80px;
+    --switch-border: 1px;
+    --switch-padding: 6px;
+    --switch-inset: calc(var(--switch-border) + var(--switch-padding));
+    --thumb-size: calc(var(--switch-height) - 2 * var(--switch-inset));
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    border: var(--switch-border) solid var(--color-outline);
+    padding: var(--switch-padding);
+    width: var(--switch-width);
+    height: var(--switch-height);
+    background-color: var(--color-surface);
+    transition: background-color 150ms ease, border-color 150ms ease;
+    border-radius: calc(var(--switch-height) / 2);
+    cursor: pointer;
+
+    &[data-station] {
+        background-color: var(--color-btn);
+    }
+}
+
+.Thumb {
+    flex-shrink: 0;
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: var(--color-btn);
+    box-shadow: 0 0 0 2px var(--color-btn);
+    transition:
+            translate 150ms ease,
+            background-color 150ms ease,
+            box-shadow 150ms ease;
+
+    [data-station] > & {
+        translate: calc(var(--switch-width) - var(--thumb-size) - 2 * var(--switch-inset)) 0;
+        background-color: var(--color-btn-text);
+        box-shadow: 0 0 0 2px var(--color-btn-text);
+    }
+}
+
+.ThumbImage {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center 60%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Track,
+    .Thumb {
+        transition: none;
+    }
+}
