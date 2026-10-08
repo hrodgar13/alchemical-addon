@@ -4,7 +4,7 @@ import Ingredients from "./components/Ingredients.jsx";
 import Distill from "./components/Distill.jsx";
 import Difficulty from "./components/Difficulty.jsx";
 import AlchemicalResult from "./components/AlchemicalResult.jsx";
-import Base from "./components/Base.jsx";
+import Base from "./components/Base/Base.jsx";
 import {PotionBrewProvider} from "./contexts/PotionBrewContext.jsx";
 
 function App() {

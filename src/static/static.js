@@ -31,7 +31,7 @@ const BASES = [
 const INGREDIENT_RARITIES = [
     {
         id: 1,
-        rarity_name: 'Середня',
+        name: 'Середня',
         difficulty: 0,
         dice_of_effect: 'к6',
         ground_dice_of_effect: 'к4',
@@ -39,7 +39,7 @@ const INGREDIENT_RARITIES = [
     },
     {
         id: 2,
-        rarity_name: 'Хороша',
+        name: 'Хороша',
         difficulty: 1,
         dice_of_effect: 'к8',
         ground_dice_of_effect: 'к6',
@@ -47,7 +47,7 @@ const INGREDIENT_RARITIES = [
     },
     {
         id: 3,
-        rarity_name: 'Нейморвірна',
+        name: 'Нейморвірна',
         difficulty: 2,
         dice_of_effect: 'к10',
         ground_dice_of_effect: 'к8',
@@ -55,7 +55,7 @@ const INGREDIENT_RARITIES = [
     },
     {
         id: 4,
-        rarity_name: 'Легендарна',
+        name: 'Легендарна',
         difficulty: 3,
         dice_of_effect: 'к12',
         ground_dice_of_effect: 'к10',

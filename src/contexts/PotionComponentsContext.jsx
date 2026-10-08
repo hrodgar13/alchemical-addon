@@ -115,7 +115,7 @@ function PotionComponentProvider({children}) {
             ingredientRarities,
             brewedPotions,
             isLoading,
-            error
+            errors
         }}>
             {children}
         </PotionComponentsContext.Provider>
