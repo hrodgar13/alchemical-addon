@@ -1,0 +1,61 @@
+.Label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    color: var(--color-text);
+    cursor: pointer;
+    user-select: none;
+
+    &[data-disabled] {
+        color: var(--color-text-muted);
+        cursor: not-allowed;
+    }
+}
+
+.Checkbox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--color-outline);
+    border-radius: 6px;
+    background-color: var(--color-surface);
+    transition: background-color 150ms ease, border-color 150ms ease;
+
+    &:hover {
+        border-color: var(--color-outline-accent);
+    }
+
+    &[data-checked] {
+        border-color: var(--color-btn);
+        background-color: var(--color-btn);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--color-outline);
+        outline-offset: 2px;
+    }
+
+    &[data-disabled] {
+        opacity: 0.5;
+        border-color: var(--color-outline);
+    }
+}
+
+.Indicator {
+    display: flex;
+    color: var(--color-btn-text);
+
+    &[data-unchecked] {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Checkbox {
+        transition: none;
+    }
+}
