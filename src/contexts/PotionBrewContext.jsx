@@ -1,5 +1,7 @@
 import {createContext, useContext, useReducer} from "react";
-import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, POTION_BASE_DIFFICULTY, STATION} from "../static/static.js";
+import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, STATION} from "../static/static.js";
+import difficultyCalculator from "../rules/difficulty-calculator.js";
+import PotionValidation from "../rules/potion-validation.js";
 
 const ACTION_BASE_CHANGED = 'base/changed'
 const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
@@ -15,13 +17,12 @@ const initialState = {
     base: null,
     ingredients: [],
     distill: false,
-    difficulty: 8,
 }
 
 function reducer(state, action){
     switch (action.type) {
         case ACTION_WHERE_WE_COOK_CHANGED:
-            return {...state, whereWeCook: action.payload}
+            return {...state, whereWeCook: action.payload, distill: action.payload === FIELD_INSTRUMENTS ? false : state.distill}
         case ACTION_BASE_CHANGED:
             return {...state, base: action.payload}
         case ACTION_DISTILL_CHANGED:
@@ -53,7 +54,9 @@ function reducer(state, action){
 }
 
 function PotionBrewProvider({children}) {
-    const [{whereWeCook, base, ingredients, distill, difficulty}, dispatch] = useReducer(reducer, initialState)
+    const [{whereWeCook, base, ingredients, distill}, dispatch] = useReducer(reducer, initialState)
+    const difficulty = difficultyCalculator(whereWeCook, base, ingredients, distill)
+    const message = PotionValidation(difficulty, whereWeCook, base, ingredients, distill)
 
     function setWhereWeCook(newWhereWeCook) {
         if(whereWeCook === newWhereWeCook) return
@@ -102,6 +105,7 @@ function PotionBrewProvider({children}) {
                 ingredients,
                 distill,
                 difficulty,
+                message,
                 setWhereWeCook,
                 setBase,
                 setDistill,
