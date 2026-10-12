@@ -5,6 +5,7 @@ import alchemyTableImg from '../../assets/AkhemyTable.png';
 import alchemistSuppliesImg from '../../assets/AlchemistSupplies.png';
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import {FIELD_INSTRUMENTS, STATION} from "../../static/static.js";
+import KnotRibbon from "./KnotRibbon.jsx";
 
 
 export default function WhereWeCook() {
@@ -21,7 +22,13 @@ export default function WhereWeCook() {
         setWhereWeCook(isStation ? FIELD_INSTRUMENTS : STATION)
     }
 
-    return <div className={styles.WhereWeCook}>
+    return <div className={styles.WhereWeCook} data-station={isStation || undefined}>
+        {/* Небо: ніч з північним сяйвом (похідний набір) або тепле світло свічки (станція) */}
+        <div className={styles.Sky} aria-hidden="true">
+            <div className={`${styles.SkyLayer} ${styles.Night}`}/>
+            <div className={`${styles.SkyLayer} ${styles.Candle}`}/>
+        </div>
+
         <h2 className={styles.Title} id="where-we-cook-title">Де готуємо зілля?</h2>
         <ToggleGroup
             value={[whereWeCook]}
@@ -46,5 +53,7 @@ export default function WhereWeCook() {
                 Повноцінна станція
             </Toggle>
         </ToggleGroup>
+
+        <KnotRibbon className={styles.Ribbon}/>
     </div>
 }
