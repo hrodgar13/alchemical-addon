@@ -4,18 +4,12 @@ import Checkbox from "../shared/checkbox/Checkbox.jsx";
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import {usePotionComponents} from "../../contexts/PotionComponentsContext.jsx";
 
-function IngredientsItem({ingredientCombination, disabled = false, onSelectIngredient, onSelectRarity, onChangeGrind}) {
+function IngredientsItem({ingredientCombination, disabled = false, onEditIngredient}) {
 
     const {ingredients, ingredientRarities} = usePotionComponents()
 
-    function handleIngredientChange(ingredient) {
-        onSelectIngredient({...ingredientCombination, ingredient})
-    }
-    function handleRarityChange(rarity) {
-        onSelectRarity({...ingredientCombination, rarity})
-    }
-    function handleGrindChange(ground) {
-        onChangeGrind({...ingredientCombination, ground})
+    function handleEditIngredient(key, value) {
+        onEditIngredient({...ingredientCombination, [key]: value})
     }
 
     return <div className={`${styles.IngredientsItem} ${disabled ? styles.DisabledIngredient : ''}`}>
@@ -25,7 +19,7 @@ function IngredientsItem({ingredientCombination, disabled = false, onSelectIngre
             <Select
                 value={ingredientCombination.ingredient}
                 items={ingredients} searchKeys={['name', 'alchemicalWord']} additionalDisplayKeys={['alchemicalWord']}
-                onSelectChange={handleIngredientChange}
+                onSelectChange={(value) => handleEditIngredient('ingredient', value)}
                 objectSelect={'Інградієнт'}/>
         </div>
         <div>
@@ -33,11 +27,12 @@ function IngredientsItem({ingredientCombination, disabled = false, onSelectIngre
             <Select
                 value={ingredientCombination.rarity}
                 items={ingredientRarities} searchKeys={['name']}
-                onSelectChange={handleRarityChange}
+                onSelectChange={(value) => handleEditIngredient('rarity', value)}
                 objectSelect={'Рідкість'}/>
         </div>
 
-        <Checkbox checked={ingredientCombination.ground} label={'Перетираємо?'} onCheckedChange={handleGrindChange}/>
+        <Checkbox checked={ingredientCombination.ground} label={'Перетираємо?'}
+                  onCheckedChange={(value) => handleEditIngredient('ground', value)}/>
     </div>
 }
 

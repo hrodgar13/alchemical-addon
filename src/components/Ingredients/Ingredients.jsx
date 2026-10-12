@@ -29,9 +29,7 @@ export default function Ingredients() {
         <div className={styles.IngredientsGrid}>
             {
                 ingredients.map(ingredient => <IngredientsItem ingredientCombination={ingredient}
-                                                               onSelectIngredient={editIngredientCombination}
-                                                               onSelectRarity={editIngredientCombination}
-                                                               onChangeGrind={editIngredientCombination}
+                                                               onEditIngredient={editIngredientCombination}
                                                                key={ingredient.ingredientCombinationId}
                                                                disabled={!!disabledIngredients.find(item => item === ingredient.ingredientCombinationId)}/>)
             }
