@@ -1,11 +1,15 @@
 .Ingredients {
+    /* position + isolation — щоб рамка з лози лягала під вміст блоку, але не під сторінку */
+    position: relative;
+    isolation: isolate;
     grid-column: 2/6;
     grid-row: 2/4;
     justify-content: center;
     align-items: center;
     width: 100%;
     text-align: center;
-    padding: 10px;
+    /* Відступ від рамки, щоб вміст не налазив на лозу */
+    padding: 32px 28px 28px;
     display: flex;
     flex-direction: column;
     gap: 10px

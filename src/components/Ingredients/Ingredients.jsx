@@ -1,5 +1,6 @@
 import styles from './ingredients.module.css'
 import IngredientsItem from "./IngredientsItem.jsx";
+import VineFrame from "./VineFrame.jsx";
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import Button from "../shared/button/Button.jsx"
 import {MAX_INGREDIENTS, MAX_UNGRIND} from "../../static/static.js";
@@ -26,6 +27,7 @@ export default function Ingredients() {
 
 
     return <div className={styles.Ingredients}>
+        <VineFrame/>
         <h2>Інградієнти</h2>
         <div className={styles.IngredientsGrid}>
             {
