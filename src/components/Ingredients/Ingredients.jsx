@@ -1,22 +1,23 @@
 import styles from './ingredients.module.css'
 import IngredientsItem from "./IngredientsItem.jsx";
-import {useEffect, useState} from "react";
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import Button from "../shared/button/Button.jsx"
-import {MAX_INGREDIENTS} from "../../static/static.js";
+import {MAX_INGREDIENTS, MAX_UNGRIND} from "../../static/static.js";
 
 
 export default function Ingredients() {
     const {ingredients, addNewIngredient, editIngredientCombination} = usePotionBrew()
 
-    const [disabledIngredients, setDisabledIngredients] = useState([])
+    // До 3 інгредієнтів — вільно; 4-й — лише якщо всі три перетерті
+    const canAddIngredient =
+        ingredients.length < MAX_UNGRIND ||
+        (ingredients.length === MAX_UNGRIND && ingredients.every(item => item.ground))
 
-    useEffect(() => {
-
-    }, [disabledIngredients]);
+    // При 4 інгредієнтах усі зобов'язані бути перетертими — змінювати перетирання не можна
+    const isGroundLocked = ingredients.length === MAX_INGREDIENTS
 
     function handleAddNewIngredient() {
-        if(ingredients.length >= MAX_INGREDIENTS) return
+        if(!canAddIngredient) return
 
         const ingredientCombinationId = ingredients.length + 1
 
@@ -31,9 +32,11 @@ export default function Ingredients() {
                 ingredients.map(ingredient => <IngredientsItem ingredientCombination={ingredient}
                                                                onEditIngredient={editIngredientCombination}
                                                                key={ingredient.ingredientCombinationId}
-                                                               disabled={!!disabledIngredients.find(item => item === ingredient.ingredientCombinationId)}/>)
+                                                               disabled={false}
+                                                               isGroundLocked={isGroundLocked}
+                                                               />)
             }
-            {ingredients.length < MAX_INGREDIENTS && <div><Button onClick={handleAddNewIngredient}>+</Button></div>}
+            {canAddIngredient && <div><Button onClick={handleAddNewIngredient}>+</Button></div>}
         </div>
     </div>
 }

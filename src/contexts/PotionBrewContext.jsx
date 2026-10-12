@@ -1,5 +1,5 @@
 import {createContext, useContext, useReducer} from "react";
-import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, POTION_BASE_DIFFICULTY, STATION} from "../static/static.js";
+import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, POTION_BASE_DIFFICULTY, STATION} from "../static/static.js";
 
 const ACTION_BASE_CHANGED = 'base/changed'
 const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
@@ -69,7 +69,10 @@ function PotionBrewProvider({children}) {
     function addNewIngredient(newIngredientCombinationId) {
         if(!!ingredients.find(item => item.ingredientCombinationId === newIngredientCombinationId)) return
 
-        const newIngredient = {ingredientCombinationId: newIngredientCombinationId, ingredient: null, rarity: INGREDIENT_RARITIES[0], ground: false}
+        // 4-й інгредієнт можливий лише коли перетерті всі — тому він створюється одразу перетертим
+        const isExtraIngredient = ingredients.length === MAX_UNGRIND
+
+        const newIngredient = {ingredientCombinationId: newIngredientCombinationId, ingredient: null, rarity: INGREDIENT_RARITIES[0], ground: isExtraIngredient}
 
         dispatch({type: ACTION_ADD_NEW_INGREDIENT, payload: newIngredient})
     }

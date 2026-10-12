@@ -4,7 +4,7 @@ import Checkbox from "../shared/checkbox/Checkbox.jsx";
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import {usePotionComponents} from "../../contexts/PotionComponentsContext.jsx";
 
-function IngredientsItem({ingredientCombination, disabled = false, onEditIngredient}) {
+function IngredientsItem({ingredientCombination, disabled = false, isGroundLocked = false, onEditIngredient}) {
 
     const {ingredients, ingredientRarities} = usePotionComponents()
 
@@ -32,7 +32,11 @@ function IngredientsItem({ingredientCombination, disabled = false, onEditIngredi
         </div>
 
         <Checkbox checked={ingredientCombination.ground} label={'Перетираємо?'}
+                  disabled={isGroundLocked}
                   onCheckedChange={(value) => handleEditIngredient('ground', value)}/>
+        {isGroundLocked && (
+            <p className={styles.Hint}>З 4 інгредієнтами всі мають бути перетерті. Щоб змінити — спочатку видаліть 4-й.</p>
+        )}
     </div>
 }
 

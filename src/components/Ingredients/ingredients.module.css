@@ -41,3 +41,10 @@
     filter: blur(3px);
     pointer-events: none;
 }
+
+.Hint {
+    grid-column: 1/3;
+    color: var(--color-text-muted);
+    font-size: 13px;
+    line-height: 1.3;
+}
