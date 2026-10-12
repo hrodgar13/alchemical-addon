@@ -1,9 +1,11 @@
 import {createContext, useContext, useReducer} from "react";
-import {FIELD_INSTRUMENTS, STATION} from "../static/static.js";
+import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, POTION_BASE_DIFFICULTY, STATION} from "../static/static.js";
 
 const ACTION_BASE_CHANGED = 'base/changed'
 const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
 const ACTION_DISTILL_CHANGED = 'distill/changed'
+const ACTION_ADD_NEW_INGREDIENT = 'ingredient/add'
+const ACTION_EDIT_EXISTING_INGREDIENT = 'ingredient/edit'
 
 const PotionBrewContext = createContext()
 
@@ -23,6 +25,20 @@ function reducer(state, action){
             return {...state, base: action.payload}
         case ACTION_DISTILL_CHANGED:
             return {...state, distill: action.payload}
+        case ACTION_ADD_NEW_INGREDIENT:
+            return {...state, ingredients: [...state.ingredients, action.payload]}
+        case ACTION_EDIT_EXISTING_INGREDIENT:
+
+            const updatedIngredientList = state.ingredients.map(ingredient => {
+                if (+ingredient.ingredientCombinationId === +action.payload.ingredientCombinationId) {
+                    return {...action.payload}
+                }
+
+                return ingredient
+            })
+
+
+            return {...state, ingredients: updatedIngredientList}
 
         default:
             throw new Error('Unknown action type in potion context reducer')
@@ -50,6 +66,19 @@ function PotionBrewProvider({children}) {
         dispatch({type: ACTION_DISTILL_CHANGED, payload: newDistillValue})
     }
 
+    function addNewIngredient(newIngredientCombinationId) {
+        if(!!ingredients.find(item => item.ingredientCombinationId === newIngredientCombinationId)) return
+
+        const newIngredient = {ingredientCombinationId: newIngredientCombinationId, ingredient: null, rarity: INGREDIENT_RARITIES[0], ground: false}
+
+        dispatch({type: ACTION_ADD_NEW_INGREDIENT, payload: newIngredient})
+    }
+
+    function editIngredientCombination(payload) {
+
+        dispatch({type: ACTION_EDIT_EXISTING_INGREDIENT, payload})
+    }
+
     return (
         <PotionBrewContext.Provider
             value={{
@@ -60,7 +89,9 @@ function PotionBrewProvider({children}) {
                 difficulty,
                 setWhereWeCook,
                 setBase,
-                setDistill
+                setDistill,
+                addNewIngredient,
+                editIngredientCombination
             }}
         >
             {children}

@@ -106,7 +106,7 @@ button:focus-visible {
 
 .brew {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
 .base, .alchemical-result, .distill, .ingredients, .where-we-cook, .difficulty {

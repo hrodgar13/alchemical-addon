@@ -1,0 +1,43 @@
+.Ingredients {
+    grid-column: 2/6;
+    grid-row: 2/4;
+    border: 1px solid;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px
+}
+
+.IngredientsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    gap: 10px
+}
+
+.IngredientsItem {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 5px;
+}
+
+.IngredientTitle {
+    grid-column: 1/3;
+}
+
+.subHeaderH4 {
+    text-align: left;
+}
+
+.DisabledIngredient {
+    filter: blur(3px);
+    pointer-events: none;
+}

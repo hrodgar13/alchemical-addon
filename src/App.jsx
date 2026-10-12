@@ -1,6 +1,6 @@
 import Header from "./components/Header.jsx";
 import WhereWeCook from "./components/WhereWeCook/WhereWeCook.jsx";
-import Ingredients from "./components/Ingredients.jsx";
+import Ingredients from "./components/Ingredients/Ingredients.jsx";
 import Distill from "./components/Distill/Distill.jsx";
 import Difficulty from "./components/Difficulty.jsx";
 import AlchemicalResult from "./components/AlchemicalResult.jsx";

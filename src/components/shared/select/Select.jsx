@@ -9,6 +9,7 @@ export default function Select({
     searchKeys = ['name'],
     additionalDisplayKeys = [],
     searchable = true,
+    objectSelect = null,
 }) {
     const {contains} = Combobox.useFilter({sensitivity: 'base'}) // 'base' = без урахування регістру
 
@@ -33,7 +34,9 @@ export default function Select({
             filter={searchable ? filterItem : null}
         >
             <Combobox.Trigger className={styles.Trigger}>
-                <Combobox.Value placeholder="Оберіть..."/>
+                <span className={styles.ValueText}>
+                    <Combobox.Value placeholder={`Оберіть${objectSelect ? ' ' +  objectSelect : '...'}`}/>
+                </span>
                 <Combobox.Icon className={styles.Icon}>
                     <ChevronIcon/>
                 </Combobox.Icon>
