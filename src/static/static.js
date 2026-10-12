@@ -6,25 +6,29 @@ const BASES = [
         id: 1,
         name: 'Вода',
         alchemicalWord: 'Дати',
-        difficulty: 1
+        difficulty: 1,
+        symbol: 'aqua'
     },
     {
         id: 2,
         name: 'Спирт',
         alchemicalWord: 'Забрати',
-        difficulty: 2
+        difficulty: 2,
+        symbol: 'spiritus'
     },
     {
         id: 3,
         name: 'Олія',
         alchemicalWord: 'Нанести',
-        difficulty: 2
+        difficulty: 2,
+        symbol: 'olium'
     },
     {
         id: 4,
         name: 'Вино',
         alchemicalWord: 'Змінити',
-        difficulty: 3
+        difficulty: 3,
+        symbol: 'vinum'
     }
 ]
 

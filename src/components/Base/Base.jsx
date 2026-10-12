@@ -2,6 +2,7 @@ import {usePotionComponents} from "../../contexts/PotionComponentsContext.jsx";
 import Select from "../shared/select/Select.jsx";
 import styles from './base.module.css'
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
+import BaseSymbol from "./BaseSymbol.jsx";
 
 export default function Base() {
     const {bases} = usePotionComponents()
@@ -12,6 +13,7 @@ export default function Base() {
     }
 
     return <div className={styles.Base}>
+        <BaseSymbol base={base} className={styles.Symbol}/>
         <h2>Оберіть Основу</h2>
         <Select items={bases} searchKeys={['name', 'alchemicalWord']} additionalDisplayKeys={['alchemicalWord']}
                 onSelectChange={handleOnChange} value={base}/>
