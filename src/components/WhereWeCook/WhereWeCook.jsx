@@ -54,6 +54,6 @@ export default function WhereWeCook() {
             </Toggle>
         </ToggleGroup>
 
-        <KnotRibbon className={styles.Ribbon}/>
+        <KnotRibbon className={styles.Ribbon} text="ᚺᛟᚹ ᛃᛟᚢ ᚷᛟᚾᚾᚨ ᚹᛟᚾᛞᛖᚱ ᚹᛟᚱᛚᛞ ᛏᛟᛞᚨᛃ?"/>
     </div>
 }
