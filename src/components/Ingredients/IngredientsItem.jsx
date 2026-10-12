@@ -3,8 +3,9 @@ import Select from "../shared/select/Select.jsx";
 import Checkbox from "../shared/checkbox/Checkbox.jsx";
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import {usePotionComponents} from "../../contexts/PotionComponentsContext.jsx";
+import Button from '../shared/button/Button'
 
-function IngredientsItem({ingredientCombination, disabled = false, isGroundLocked = false, onEditIngredient}) {
+function IngredientsItem({ingredientCombination, position, disabled = false, isGroundLocked = false, onEditIngredient, onRemoveIngredient}) {
 
     const {ingredients, ingredientRarities} = usePotionComponents()
 
@@ -13,7 +14,12 @@ function IngredientsItem({ingredientCombination, disabled = false, isGroundLocke
     }
 
     return <div className={`${styles.IngredientsItem} ${disabled ? styles.DisabledIngredient : ''}`}>
-        <h3 className={styles.IngredientTitle}>Інградієнт {ingredientCombination.ingredientCombinationId}</h3>
+        <div className={`${styles.IngredientsItemHeader}`}>
+            <h3 className={styles.IngredientTitle}>Інградієнт {position}</h3>
+            <div>
+                <Button onClick={() => onRemoveIngredient(ingredientCombination.ingredientCombinationId)}>x</Button>
+            </div>
+        </div>
         <div>
             <h4 className={styles.subHeaderH4}>Інградієнт</h4>
             <Select

@@ -1,7 +1,6 @@
 .Ingredients {
     grid-column: 2/6;
     grid-row: 2/4;
-    border: 1px solid;
     justify-content: center;
     align-items: center;
     width: 100%;
@@ -30,7 +29,7 @@
 }
 
 .IngredientTitle {
-    grid-column: 1/3;
+
 }
 
 .subHeaderH4 {
@@ -47,4 +46,11 @@
     color: var(--color-text-muted);
     font-size: 13px;
     line-height: 1.3;
+}
+
+.IngredientsItemHeader {
+    grid-column: 1/3;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

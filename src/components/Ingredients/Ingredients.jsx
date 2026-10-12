@@ -6,12 +6,14 @@ import {MAX_INGREDIENTS, MAX_UNGRIND} from "../../static/static.js";
 
 
 export default function Ingredients() {
-    const {ingredients, addNewIngredient, editIngredientCombination} = usePotionBrew()
+    const {ingredients, addNewIngredient, editIngredientCombination, removeIngredient} = usePotionBrew()
+
+    const areAllSlotsFilled = ingredients.every(item => item.ingredient !== null)
 
     // До 3 інгредієнтів — вільно; 4-й — лише якщо всі три перетерті
-    const canAddIngredient =
+    const canAddIngredient = areAllSlotsFilled && (
         ingredients.length < MAX_UNGRIND ||
-        (ingredients.length === MAX_UNGRIND && ingredients.every(item => item.ground))
+        (ingredients.length === MAX_UNGRIND && ingredients.every(item => item.ground)))
 
     // При 4 інгредієнтах усі зобов'язані бути перетертими — змінювати перетирання не можна
     const isGroundLocked = ingredients.length === MAX_INGREDIENTS
@@ -19,9 +21,7 @@ export default function Ingredients() {
     function handleAddNewIngredient() {
         if(!canAddIngredient) return
 
-        const ingredientCombinationId = ingredients.length + 1
-
-        addNewIngredient(ingredientCombinationId)
+        addNewIngredient()
     }
 
 
@@ -29,8 +29,10 @@ export default function Ingredients() {
         <h2>Інградієнти</h2>
         <div className={styles.IngredientsGrid}>
             {
-                ingredients.map(ingredient => <IngredientsItem ingredientCombination={ingredient}
+                ingredients.map((ingredient, index) => <IngredientsItem ingredientCombination={ingredient}
+                                                               position={index + 1}
                                                                onEditIngredient={editIngredientCombination}
+                                                               onRemoveIngredient={removeIngredient}
                                                                key={ingredient.ingredientCombinationId}
                                                                disabled={false}
                                                                isGroundLocked={isGroundLocked}

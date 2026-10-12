@@ -6,6 +6,7 @@ const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
 const ACTION_DISTILL_CHANGED = 'distill/changed'
 const ACTION_ADD_NEW_INGREDIENT = 'ingredient/add'
 const ACTION_EDIT_EXISTING_INGREDIENT = 'ingredient/edit'
+const ACTION_REMOVE_INGREDIENT = 'ingredient/remove'
 
 const PotionBrewContext = createContext()
 
@@ -30,7 +31,7 @@ function reducer(state, action){
         case ACTION_EDIT_EXISTING_INGREDIENT:
 
             const updatedIngredientList = state.ingredients.map(ingredient => {
-                if (+ingredient.ingredientCombinationId === +action.payload.ingredientCombinationId) {
+                if (ingredient.ingredientCombinationId === action.payload.ingredientCombinationId) {
                     return {...action.payload}
                 }
 
@@ -39,6 +40,12 @@ function reducer(state, action){
 
 
             return {...state, ingredients: updatedIngredientList}
+
+        case ACTION_REMOVE_INGREDIENT:
+            return {
+                ...state,
+                ingredients: state.ingredients.filter(ingredient => ingredient.ingredientCombinationId !== action.payload)
+            }
 
         default:
             throw new Error('Unknown action type in potion context reducer')
@@ -66,8 +73,9 @@ function PotionBrewProvider({children}) {
         dispatch({type: ACTION_DISTILL_CHANGED, payload: newDistillValue})
     }
 
-    function addNewIngredient(newIngredientCombinationId) {
-        if(!!ingredients.find(item => item.ingredientCombinationId === newIngredientCombinationId)) return
+    function addNewIngredient() {
+        // Унікальний id, що не повторюється після видалень (на відміну від length + 1)
+        const newIngredientCombinationId = crypto.randomUUID()
 
         // 4-й інгредієнт можливий лише коли перетерті всі — тому він створюється одразу перетертим
         const isExtraIngredient = ingredients.length === MAX_UNGRIND
@@ -82,6 +90,10 @@ function PotionBrewProvider({children}) {
         dispatch({type: ACTION_EDIT_EXISTING_INGREDIENT, payload})
     }
 
+    function removeIngredient(ingredientCombinationId) {
+        dispatch({type: ACTION_REMOVE_INGREDIENT, payload: ingredientCombinationId})
+    }
+
     return (
         <PotionBrewContext.Provider
             value={{
@@ -94,7 +106,8 @@ function PotionBrewProvider({children}) {
                 setBase,
                 setDistill,
                 addNewIngredient,
-                editIngredientCombination
+                editIngredientCombination,
+                removeIngredient
             }}
         >
             {children}
