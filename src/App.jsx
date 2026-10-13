@@ -1,29 +1,38 @@
 import Header from "./components/Header.jsx"
-import WhereWeCook from "./components/WhereWeCook/WhereWeCook.jsx"
-import Ingredients from "./components/Ingredients/Ingredients.jsx"
-import Distill from "./components/Distill/Distill.jsx"
-import Difficulty from "./components/DifficultyArrow/Difficulty.jsx"
-import AlchemicalResult from "./components/AlchemicalResult/AlchemicalResult.jsx"
-import Brew from "./components/Brew/Brew.jsx"
-import Base from "./components/Base/Base.jsx"
-import {PotionBrewProvider} from "./contexts/PotionBrewContext.jsx"
+import {BrowserRouter, Route, Routes} from "react-router"
+import {lazy, Suspense} from "react"
+import {AuthProvider} from "./contexts/auth/AuthContext.jsx"
+import ProtectedRoute from "./pages/ProtectedRoute.jsx"
+import SpinnerFullPage from "./pages/SpinnerFullPage/SpinnerFullPage.jsx"
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.jsx"
 
+const AlchemicalTable = lazy(() => import("./pages/AlchemicalTable.jsx"))
+const Login = lazy(() => import("./pages/Login/Login.jsx"))
+
+// Роутер — найзовнішній: тоді і хедер може використовувати <Link> та useNavigate
 function App() {
     return (
-        <div className="app">
-            <Header />
-            <div className="brew">
-                <PotionBrewProvider>
-                    <WhereWeCook />
-                    <Base />
-                    <Ingredients />
-                    <Distill />
-                    <Difficulty />
-                    <AlchemicalResult />
-                    <Brew />
-                </PotionBrewProvider>
-            </div>
-        </div>
+        <BrowserRouter>
+            <AuthProvider>
+                <div className="app">
+                    <Header />
+                    <Suspense fallback={<SpinnerFullPage />}>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={
+                                    <ProtectedRoute>
+                                        <AlchemicalTable />
+                                    </ProtectedRoute>
+                                }
+                            />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="*" element={<NotFoundPage />} />
+                        </Routes>
+                    </Suspense>
+                </div>
+            </AuthProvider>
+        </BrowserRouter>
     )
 }
 

@@ -1,0 +1,22 @@
+.spinnerContainer {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.spinner {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    /* Маска лишає від кола лише кільце, а градієнт робить з нього «хвіст», що крутиться */
+    background: conic-gradient(transparent 10%, var(--color-outline));
+    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+    animation: rotate 1.5s infinite linear;
+}
+
+@keyframes rotate {
+    to {
+        transform: rotate(1turn);
+    }
+}

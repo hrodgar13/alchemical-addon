@@ -57,30 +57,24 @@
     overflow-wrap: anywhere;
 }
 
-.NameInput,
+/* Поле назви — спільний Input, тут лише його місце в рядку */
+.NameField {
+    flex: 1;
+}
+
 .DescriptionInput {
     border: 1px solid var(--color-outline);
     border-radius: 8px;
     background-color: var(--color-surface);
     padding: 4px 8px;
+    width: 100%;
+    resize: vertical;
+    line-height: 1.5;
 
     &:focus-visible {
         outline: 2px solid var(--color-outline);
         outline-offset: 1px;
     }
-}
-
-.NameInput {
-    flex: 1;
-    min-width: 0;
-    height: 32px;
-    font-size: 18px;
-}
-
-.DescriptionInput {
-    width: 100%;
-    resize: vertical;
-    line-height: 1.5;
 }
 
 .Text {

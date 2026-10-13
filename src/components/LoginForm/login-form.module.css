@@ -1,0 +1,36 @@
+/* Підкладка кольору сторінки поверх дерева на фоні, з тією ж різьбленою рамкою, що й блок зілля.
+   position + isolation — щоб рамка (z-index: -1) лягла під вміст форми, але над деревом */
+.Form {
+    position: relative;
+    isolation: isolate;
+    width: min(400px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 44px 36px 36px;
+    background-color: var(--color-bg);
+    box-shadow: 0 12px 40px rgb(0 0 0 / 0.25);
+    transition: background-color 0.3s;
+}
+
+.Title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-header-text);
+}
+
+.Error {
+    color: var(--color-danger);
+    font-size: 14px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Form {
+        transition: none;
+    }
+}

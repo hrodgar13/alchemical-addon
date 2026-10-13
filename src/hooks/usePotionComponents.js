@@ -1,5 +1,5 @@
 import {useContext} from "react"
-import {PotionComponentsContext} from "../contexts/potion-components-context.js"
+import {PotionComponentsContext} from "../contexts/potion-components/potion-components-context.js"
 
 export function usePotionComponents() {
     const context = useContext(PotionComponentsContext)

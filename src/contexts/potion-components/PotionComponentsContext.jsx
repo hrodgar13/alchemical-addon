@@ -6,7 +6,7 @@ import {
     INGREDIENT_RARITIES,
     MOCK_INGREDIENTS,
     STATION,
-} from "../static/static.js"
+} from "../../static/static.js"
 import {PotionComponentsContext} from "./potion-components-context.js"
 
 const ACTION_LOADING = "loading"

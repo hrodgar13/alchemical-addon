@@ -16,12 +16,14 @@
 
     --color-outline: #1f3a6b;
     --color-outline-accent: #a87b12;
+
+    --color-danger: #b3412e;
 }
 
 :root.dark {
     color-scheme: dark;
 
-    --color-header-bg: #1f3d2c;
+    --color-header-bg: #1d3a3a;
     --color-header-text: #e8f3ea;
 
     --color-bg: #1e1f2e;
@@ -30,8 +32,15 @@
     --color-text: #e8e5f0;
     --color-text-muted: #a9a6bc;
 
+    /* Той самий холодний бірюзовий тон, що й хедер, але світліший — щоб кнопки й стрілка
+       не губилися на темному фоні */
+    --color-btn: #2b6e69;
+    --color-btn-hover: #245c58;
+
     --color-outline: #7a9be0;
     --color-outline-accent: #d9b44a;
+
+    --color-danger: #f08a74;
 }
 
 *,
@@ -47,7 +56,6 @@ body {
     background-color: var(--color-bg);
     color: var(--color-text);
     line-height: 1.5;
-    padding-bottom: 30px;
 }
 
 button,
@@ -98,17 +106,21 @@ button:focus-visible {
     outline-offset: 2px;
 }
 
-.theme-mode-btn {
-    background: none;
-    border: 1px solid var(--color-outline);
-    cursor: pointer;
-    width: 48px;
-    height: 48px;
-    border-radius: 100%;
-    text-align: center;
+/* Хедер зверху, сторінка забирає решту висоти екрана — так вхід і 404 центруються по екрану */
+.app {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .brew {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    padding-bottom: 30px;
 }
