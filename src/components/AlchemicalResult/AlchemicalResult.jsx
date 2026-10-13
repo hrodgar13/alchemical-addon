@@ -2,6 +2,7 @@ import styles from "./alchemical-result.module.css"
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
 import IngredientEffect from "./IngredientEffect.jsx"
 import PotionDescription from "./PotionDescription.jsx"
+import CarvedFrame, {CarvedDivider} from "./CarvedFrame.jsx"
 import {flushSync} from "react-dom"
 import {useRef} from "react"
 
@@ -46,7 +47,9 @@ export default function AlchemicalResult() {
                     />
                 ))}
             </ul>
+            <CarvedDivider className={styles.Divider} />
             <PotionDescription textareaRef={textareaRef} />
+            <CarvedFrame />
         </div>
     )
 }

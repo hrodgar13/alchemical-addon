@@ -1,9 +1,35 @@
 .Brew {
+    /* position + isolation — щоб трикветр на фоні лягав під кнопку, але не під сторінку */
+    position: relative;
+    isolation: isolate;
     grid-column: 5;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-height: 280px;
     padding: 20px;
+}
+
+/* Трикветр з рунічним колом — по центру, на фоні, як символи основи й дистиляції.
+   Після кожної варки повертається на 120° (кут задає Brew.jsx) */
+.Symbol {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    margin: auto;
+    width: min(100%, 260px);
+    aspect-ratio: 1;
+    color: var(--color-text);
+    opacity: 0.15;
+    font-family: "Noto Sans Runic", "Segoe UI Historic", sans-serif;
+    pointer-events: none;
+    transition: rotate 1.2s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Symbol {
+        transition: none;
+    }
 }
 
 .Button {

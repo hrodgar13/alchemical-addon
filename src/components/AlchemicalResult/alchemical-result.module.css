@@ -1,14 +1,24 @@
 .AlchemicalResult {
+    /* position + isolation — щоб різьблена рамка лягала під вміст блоку, але не під сторінку */
+    position: relative;
+    isolation: isolate;
     grid-column: 1/5;
-    border: 1px solid black;
-    padding: 5px;
+    /* Відступ від рамки, щоб вміст не налазив на вузли в кутах */
+    padding: 28px;
     display: flex;
-    gap: 5px;
+    gap: 16px;
 }
 
 .IngredientsEffects {
-    border: 1px solid;
     width: 20%;
+    list-style: none;
+}
+
+/* Колір як у рамки — розділювач з тієї ж «різьби» */
+.Divider {
+    flex-shrink: 0;
+    align-self: stretch;
+    color: color-mix(in srgb, var(--color-text) 15%, var(--color-bg));
 }
 
 .IngredientEffect {
