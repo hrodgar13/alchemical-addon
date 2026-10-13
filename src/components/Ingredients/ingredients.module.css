@@ -57,3 +57,40 @@
     align-items: center;
     justify-content: space-between;
 }
+
+/* Селект інгредієнта й кнопка редагування поруч; селект займає все, що лишилось */
+.SelectRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    & > :first-child {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* Форма інгредієнта в модалці — відступи навколо дає саме вікно */
+.Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+/* Тип ефекту й одиниця часу — поряд; одиниця з'являється лише для часових */
+.FormRow {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 12px;
+}
+
+.Error {
+    color: var(--color-danger);
+    font-size: 14px;
+
+    &:empty {
+        display: none;
+    }
+}

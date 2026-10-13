@@ -25,6 +25,7 @@ const initialState = {
     whereWeCook: FIELD_INSTRUMENTS,
     // Лише id: саму основу беремо з каталогу під час рендеру, тож її редагування одразу видно в рецепті
     baseId: null,
+    // Слоти рецепту: {ingredientCombinationId, ingredientId, rarity, ground}. Як і з основою — лише id
     ingredients: [],
     distill: false,
     // Підтверджені, але ще не збережені на сервері зміни зілля (назва, опис, згар)
@@ -91,10 +92,15 @@ function reducer(state, action) {
 
 function PotionBrewProvider({children}) {
     const [state, dispatch] = useReducer(reducer, initialState)
-    const {whereWeCook, baseId, ingredients, distill} = state
-    const {bases, brewedPotions, saveBrewedPotion} = usePotionComponents()
+    const {whereWeCook, baseId, distill} = state
+    const {bases, ingredients: catalogIngredients, brewedPotions, saveBrewedPotion} = usePotionComponents()
 
     const base = bases.find(base => base.id === baseId) ?? null
+    // Назовні слот віддаємо з повним інгредієнтом із каталогу — споживачі не знають про id
+    const ingredients = state.ingredients.map(({ingredientId, ...slot}) => ({
+        ...slot,
+        ingredient: catalogIngredients.find(ingredient => ingredient.id === ingredientId) ?? null,
+    }))
 
     const difficulty = difficultyCalculator(whereWeCook, base, ingredients, distill)
     const message = PotionValidation(difficulty, whereWeCook, base, ingredients)
@@ -141,7 +147,7 @@ function PotionBrewProvider({children}) {
 
         const newIngredient = {
             ingredientCombinationId: newIngredientCombinationId,
-            ingredient: null,
+            ingredientId: null,
             rarity: INGREDIENT_RARITIES[0],
             ground: isExtraIngredient,
         }
@@ -149,8 +155,9 @@ function PotionBrewProvider({children}) {
         dispatch({type: ACTION_ADD_NEW_INGREDIENT, payload: newIngredient})
     }
 
-    function editIngredientCombination(payload) {
-        dispatch({type: ACTION_EDIT_EXISTING_INGREDIENT, payload})
+    // Приходить слот з об'єктом інгредієнта (як його віддали назовні) — у стан кладемо лише id
+    function editIngredientCombination({ingredient, ...slot}) {
+        dispatch({type: ACTION_EDIT_EXISTING_INGREDIENT, payload: {...slot, ingredientId: ingredient?.id ?? null}})
     }
 
     function removeIngredient(ingredientCombinationId) {

@@ -44,6 +44,15 @@
     }
 }
 
+.Multiline {
+    height: auto;
+    min-height: 80px;
+    padding: 8px 10px;
+    resize: vertical;
+    font: inherit;
+    line-height: 1.4;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .Input {
         transition: none;

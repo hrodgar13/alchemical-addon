@@ -17,6 +17,7 @@ const BREWED_POTIONS_LOADED = "brewedPotions/loaded"
 const BREWED_POTION_SAVED = "brewedPotion/saved"
 const FINISHED = "finished"
 const BASE_SAVED = "base/saved"
+const INGREDIENT_SAVED = "ingredient/saved"
 
 const initialState = {
     cookPlaces: [FIELD_INSTRUMENTS, STATION],
@@ -26,6 +27,13 @@ const initialState = {
     brewedPotions: [],
     isLoading: false,
     errors: [],
+}
+
+// Збережений запис: відомий id — замінюємо на місці, новий — додаємо в кінець
+function upsertById(list, item) {
+    const isExisting = list.some(listItem => listItem.id === item.id)
+
+    return isExisting ? list.map(listItem => (listItem.id === item.id ? item : listItem)) : [...list, item]
 }
 
 function reducer(state, action) {
@@ -38,26 +46,12 @@ function reducer(state, action) {
             return {...state, ingredients: action.payload}
         case BREWED_POTIONS_LOADED:
             return {...state, brewedPotions: action.payload}
-        case BREWED_POTION_SAVED: {
-            const isExisting = state.brewedPotions.some(potion => potion.id === action.payload.id)
-
-            return {
-                ...state,
-                brewedPotions: isExisting
-                    ? state.brewedPotions.map(potion => (potion.id === action.payload.id ? action.payload : potion))
-                    : [...state.brewedPotions, action.payload],
-            }
-        }
-        case BASE_SAVED: {
-            const isExist = state.bases.some(base => base.id === action.payload.id)
-
-            return {
-                ...state,
-                bases: isExist
-                    ? state.bases.map(base => (base.id === action.payload.id ? action.payload : base))
-                    : [...state.bases, action.payload],
-            }
-        }
+        case BREWED_POTION_SAVED:
+            return {...state, brewedPotions: upsertById(state.brewedPotions, action.payload)}
+        case BASE_SAVED:
+            return {...state, bases: upsertById(state.bases, action.payload)}
+        case INGREDIENT_SAVED:
+            return {...state, ingredients: upsertById(state.ingredients, action.payload)}
         case ERROR:
             return {...state, errors: [...state.errors, action.payload]}
         case FINISHED:
@@ -133,6 +127,15 @@ function PotionComponentProvider({children}) {
         return savedBase
     }
 
+    // Як addOrEditBase: помилку показує форма, повертаємо збережений інгредієнт
+    async function addOrEditIngredient(ingredient) {
+        //TODO there will be save to API
+        const savedIngredient = {...ingredient, id: ingredient.id ?? crypto.randomUUID()}
+        dispatch({type: INGREDIENT_SAVED, payload: savedIngredient})
+
+        return savedIngredient
+    }
+
     return (
         <PotionComponentsContext.Provider
             value={{
@@ -145,6 +148,7 @@ function PotionComponentProvider({children}) {
                 errors,
                 saveBrewedPotion,
                 addOrEditBase,
+                addOrEditIngredient,
             }}
         >
             {children}
