@@ -1,6 +1,6 @@
 import {FIELD_INSTRUMENTS, LIMIT_DIFFICULTY_IN_FIELD_INSTRUMENTS} from "../static/static.js"
 
-export default function PotionValidation(difficulty, whereWeCook, base, ingredients, distill) {
+export default function PotionValidation(difficulty, whereWeCook, base, ingredients) {
     if (!base) return "Оберіть основу зілля"
     if (!ingredients || !ingredients.length) return "Додайте хоча б один інгредієнт"
 

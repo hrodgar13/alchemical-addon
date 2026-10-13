@@ -1,7 +1,7 @@
 import styles from "./ingredients.module.css"
 import IngredientsItem from "./IngredientsItem.jsx"
 import VineFrame from "./VineFrame.jsx"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import Button from "../shared/button/Button.jsx"
 import {MAX_INGREDIENTS, MAX_UNGRIND} from "../../static/static.js"
 

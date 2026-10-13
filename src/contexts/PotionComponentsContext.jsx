@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useReducer} from "react"
+import {useEffect, useReducer} from "react"
 import {
     BASES,
     BREWED_POTIONS,
@@ -7,8 +7,7 @@ import {
     MOCK_INGREDIENTS,
     STATION,
 } from "../static/static.js"
-
-const PotionComponentsContext = createContext()
+import {PotionComponentsContext} from "./potion-components-context.js"
 
 const ACTION_LOADING = "loading"
 const BASE_LOADED = "base/loaded"
@@ -131,10 +130,4 @@ function PotionComponentProvider({children}) {
     )
 }
 
-function usePotionComponents() {
-    const context = useContext(PotionComponentsContext)
-    if (context === undefined) throw new Error("Context used outside of PotionComponents Provider")
-    return context
-}
-
-export {PotionComponentProvider, usePotionComponents}
+export {PotionComponentProvider}

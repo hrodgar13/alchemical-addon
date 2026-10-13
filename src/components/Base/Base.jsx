@@ -1,7 +1,7 @@
-import {usePotionComponents} from "../../contexts/PotionComponentsContext.jsx"
+import {usePotionComponents} from "../../hooks/usePotionComponents.js"
 import Select from "../shared/select/Select.jsx"
 import styles from "./base.module.css"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import BaseSymbol from "./BaseSymbol.jsx"
 
 export default function Base() {

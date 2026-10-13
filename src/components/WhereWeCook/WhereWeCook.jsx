@@ -3,7 +3,7 @@ import {Toggle} from "@base-ui/react/toggle"
 import styles from "./where-we-cook.module.css"
 import alchemyTableImg from "../../assets/AkhemyTable.png"
 import alchemistSuppliesImg from "../../assets/AlchemistSupplies.png"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import {FIELD_INSTRUMENTS, STATION} from "../../static/static.js"
 import KnotRibbon from "./KnotRibbon.jsx"
 

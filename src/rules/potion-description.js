@@ -36,6 +36,20 @@ export function toStoredDescription(text, ingredientEffects) {
 }
 
 /*
+ *  Теги в тексті редактора, яких немає серед інгредієнтів цього зілля: опечатка (%Холд%)
+ *  або слово з іншого зілля. Такий тег не підставиться і лишиться в описі як є.
+ *  Тег починається з літери — тож «50% шкоди і 20%» чи «50%, %Холод%» не дають хибних тегів.
+ * */
+const EDITABLE_TAG = /%(\p{L}[^%]*?)%/gu
+
+export function findUnknownTags(text, ingredientEffects) {
+    const knownWords = new Set(ingredientEffects.map(effect => effect.ingredient.alchemicalWord))
+    const unknownTags = [...text.matchAll(EDITABLE_TAG)].filter(([, word]) => !knownWords.has(word)).map(([tag]) => tag)
+
+    return [...new Set(unknownTags)]
+}
+
+/*
  *  Розбиває шаблон на частини для рендеру як текст у JSX (без dangerouslySetInnerHTML):
  *  [{text: 'Випивши зілля, істота протягом '}, {value: '20 хвилин'}, {text: ' завдає…'}]
  *  split з capture-групою лишає теги в масиві. Невідомий тег показується як є.

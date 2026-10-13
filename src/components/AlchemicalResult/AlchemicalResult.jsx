@@ -1,5 +1,5 @@
 import styles from "./alchemical-result.module.css"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import IngredientEffect from "./IngredientEffect.jsx"
 import PotionDescription from "./PotionDescription.jsx"
 import CarvedFrame, {CarvedDivider} from "./CarvedFrame.jsx"

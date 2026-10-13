@@ -1,6 +1,6 @@
 import {useState} from "react"
 import {Button as BaseButton} from "@base-ui/react/button"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import TriquetraSymbol from "./TriquetraSymbol.jsx"
 import styles from "./brew.module.css"
 

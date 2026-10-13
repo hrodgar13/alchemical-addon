@@ -1,8 +1,8 @@
 import {Fragment, useId} from "react"
 import Button from "../shared/button/Button.jsx"
 import {CheckIcon, CloseIcon, PencilIcon} from "../shared/icons/Icons.jsx"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
-import {parseDescription} from "../../rules/potion-description.js"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
+import {findUnknownTags, parseDescription} from "../../rules/potion-description.js"
 
 import styles from "./alchemical-result.module.css"
 
@@ -31,6 +31,8 @@ export default function PotionDescription({textareaRef}) {
 
     const isEditing = potionEdit !== null
     const availableTags = ingredientEffects.map(effect => `%${effect.ingredient.alchemicalWord}%`).join(", ")
+    // Похідне значення — рахується з тексту під час рендеру, тож оновлюється з кожною набраною літерою
+    const unknownTags = isEditing ? findUnknownTags(potionEdit.description, ingredientEffects) : []
 
     return (
         <div className={styles.Description}>
@@ -88,6 +90,21 @@ export default function PotionDescription({textareaRef}) {
                     />
                     <p className={styles.Hint} id={tagsHintId}>
                         Теги цього зілля: {availableTags} — на їх місці будуть кубики й тривалість з рецепту.
+                    </p>
+                    {/* role="status" — скрінрідер озвучить попередження, щойно воно з'явиться */}
+                    <p className={styles.Warning} role="status">
+                        {unknownTags.length > 0 && (
+                            <>
+                                ⚠ Невідомі теги:{" "}
+                                {unknownTags.map((tag, index) => (
+                                    <Fragment key={tag}>
+                                        {index > 0 && ", "}
+                                        <span className={styles.UnknownTag}>{tag}</span>
+                                    </Fragment>
+                                ))}{" "}
+                                — таких інгредієнтів у зіллі немає, тег лишиться в описі як текст.
+                            </>
+                        )}
                     </p>
                 </>
             )}

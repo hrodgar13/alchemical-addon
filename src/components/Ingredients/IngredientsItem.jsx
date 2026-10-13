@@ -1,8 +1,7 @@
 import styles from "./ingredients.module.css"
 import Select from "../shared/select/Select.jsx"
 import Checkbox from "../shared/checkbox/Checkbox.jsx"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
-import {usePotionComponents} from "../../contexts/PotionComponentsContext.jsx"
+import {usePotionComponents} from "../../hooks/usePotionComponents.js"
 import Button from "../shared/button/Button"
 
 function IngredientsItem({

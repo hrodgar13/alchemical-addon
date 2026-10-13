@@ -98,6 +98,21 @@
     font-size: 14px;
 }
 
+/* Попередження про невідомі теги: текст основним кольором (читабельний),
+   а самі теги — акцентним золотим, щоб їх було легко знайти в описі */
+.Warning {
+    font-size: 14px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.UnknownTag {
+    font-weight: 700;
+    color: var(--color-outline-accent);
+}
+
 .Scorched {
     color: var(--color-text-muted);
     font-style: italic;

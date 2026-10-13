@@ -1,11 +1,12 @@
-import {createContext, useContext, useReducer} from "react"
+import {useReducer} from "react"
 import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, STATION} from "../static/static.js"
 import difficultyCalculator from "../rules/difficulty-calculator.js"
 import PotionValidation from "../rules/potion-validation.js"
 import {calculateIngredientEffects} from "../rules/ingredient-effects.js"
 import {buildAlchemicalSentence, findBrewedPotion, getRecipeKey} from "../rules/brewed-potion.js"
 import {toEditableDescription, toStoredDescription} from "../rules/potion-description.js"
-import {usePotionComponents} from "./PotionComponentsContext.jsx"
+import {usePotionComponents} from "../hooks/usePotionComponents.js"
+import {PotionBrewContext} from "./potion-brew-context.js"
 
 const ACTION_BASE_CHANGED = "base/changed"
 const ACTION_WHERE_WE_COOK_CHANGED = "whereWeCook/changed"
@@ -19,8 +20,6 @@ const ACTION_POTION_EDIT_CHANGED = "potionEdit/changed"
 const ACTION_POTION_EDIT_CONFIRMED = "potionEdit/confirmed"
 const ACTION_POTION_EDIT_CANCELLED = "potionEdit/cancelled"
 const ACTION_RESET = "reset"
-
-const PotionBrewContext = createContext()
 
 const initialState = {
     whereWeCook: FIELD_INSTRUMENTS,
@@ -49,7 +48,8 @@ function reducer(state, action) {
             return {...state, distill: action.payload}
         case ACTION_ADD_NEW_INGREDIENT:
             return {...state, ingredients: [...state.ingredients, action.payload]}
-        case ACTION_EDIT_EXISTING_INGREDIENT:
+        // Фігурні дужки дають case власну область видимості для const
+        case ACTION_EDIT_EXISTING_INGREDIENT: {
             const updatedIngredientList = state.ingredients.map(ingredient => {
                 if (ingredient.ingredientCombinationId === action.payload.ingredientCombinationId) {
                     return {...action.payload}
@@ -59,7 +59,7 @@ function reducer(state, action) {
             })
 
             return {...state, ingredients: updatedIngredientList}
-
+        }
         case ACTION_REMOVE_INGREDIENT:
             return {
                 ...state,
@@ -94,7 +94,7 @@ function PotionBrewProvider({children}) {
     const {brewedPotions, saveBrewedPotion} = usePotionComponents()
 
     const difficulty = difficultyCalculator(whereWeCook, base, ingredients, distill)
-    const message = PotionValidation(difficulty, whereWeCook, base, ingredients, distill)
+    const message = PotionValidation(difficulty, whereWeCook, base, ingredients)
     const ingredientEffects = calculateIngredientEffects({ingredients, distill})
 
     // Зілля поточного рецепту — похідні значення, рахуються під час рендеру
@@ -238,10 +238,4 @@ function PotionBrewProvider({children}) {
     )
 }
 
-function usePotionBrew() {
-    const context = useContext(PotionBrewContext)
-    if (context === undefined) throw new Error("Context used outside of PotionBrewProvider")
-    return context
-}
-
-export {PotionBrewProvider, usePotionBrew}
+export {PotionBrewProvider}

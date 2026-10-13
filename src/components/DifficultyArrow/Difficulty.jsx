@@ -1,7 +1,7 @@
 import styles from "./difficulty-arrow.module.css"
 import ArrowDown from "./ArrowDown.jsx"
 import Cross from "./Cross.jsx"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 
 export default function Difficulty({arrowColor}) {
     const {difficulty, message} = usePotionBrew()

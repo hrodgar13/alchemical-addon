@@ -1,6 +1,6 @@
 import styles from "./distill.module.css"
 import Checkbox from "../shared/checkbox/Checkbox.jsx"
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import {STATION} from "../../static/static.js"
 import RetortSymbol from "./RetortSymbol.jsx"
 
