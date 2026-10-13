@@ -18,6 +18,10 @@ export default function Select({
     objectSelect = null,
     createLabel = "",
     onCreate = null,
+    // Видимий підпис над селектом; Combobox.Label сам зв'язує його з тригером
+    label = "",
+    // Для <form action>: значення потрапить у FormData під цим ім'ям як item.id
+    name,
 }) {
     const {contains} = Combobox.useFilter({sensitivity: "base"}) // 'base' = без урахування регістру
     const [query, setQuery] = useState("")
@@ -64,6 +68,17 @@ export default function Select({
         onCreate(createQuery)
     }
 
+    const trigger = (
+        <Combobox.Trigger className={styles.Trigger}>
+            <span className={styles.ValueText}>
+                <Combobox.Value placeholder={`Оберіть${objectSelect ? " " + objectSelect : "..."}`} />
+            </span>
+            <Combobox.Icon className={styles.Icon}>
+                <ChevronIcon />
+            </Combobox.Icon>
+        </Combobox.Trigger>
+    )
+
     return (
         <Combobox.Root
             onInputValueChange={setQuery}
@@ -71,18 +86,21 @@ export default function Select({
             onValueChange={handleValueChange}
             onOpenChangeComplete={handleOpenChangeComplete}
             itemToStringLabel={item => item.name ?? createLabel}
+            itemToStringValue={item => String(item.id ?? "")}
+            name={name}
             isItemEqualToValue={(item, value) => item.id === value.id}
             items={allItems}
             filter={searchable ? filterItem : null}
         >
-            <Combobox.Trigger className={styles.Trigger}>
-                <span className={styles.ValueText}>
-                    <Combobox.Value placeholder={`Оберіть${objectSelect ? " " + objectSelect : "..."}`} />
-                </span>
-                <Combobox.Icon className={styles.Icon}>
-                    <ChevronIcon />
-                </Combobox.Icon>
-            </Combobox.Trigger>
+            {label ? (
+                // Колонка «підпис + тригер» — лише з підписом, щоб не міняти layout селектів без нього
+                <div className={styles.Field}>
+                    <Combobox.Label className={styles.Label}>{label}</Combobox.Label>
+                    {trigger}
+                </div>
+            ) : (
+                trigger
+            )}
 
             <Combobox.Portal>
                 <Combobox.Positioner className={styles.Positioner} sideOffset={6}>

@@ -2,34 +2,7 @@
 // Невідома або не вибрана основа — заглушка: коло з написом ᚷᛁᚾᚾᚢᚾ.
 // Колір — з CSS-властивості `color` батька (currentColor), тож працює в обох темах.
 
-const SYMBOLS = {
-    aqua: {
-        rune: "ᚨᚲᚢᚨ",
-        shape: <polygon points="15,10 105,10 60,88" />,
-    },
-    spiritus: {
-        rune: "ᛊᛈᛁᚱᛁᛏᚢᛊ",
-        shape: (
-            <>
-                <polygon points="60,10 105,88 15,88" />
-                <line x1="5" y1="66" x2="115" y2="66" />
-            </>
-        ),
-    },
-    olium: {
-        rune: "ᛟᛚᛁᚢᛗ",
-        shape: <polygon points="60,10 105,88 15,88" />,
-    },
-    vinum: {
-        rune: "ᚢᛁᚾᚢᛗ",
-        shape: (
-            <>
-                <polygon points="15,10 105,10 60,88" />
-                <line x1="5" y1="32" x2="115" y2="32" />
-            </>
-        ),
-    },
-}
+import {BASE_SYMBOLS} from "./base-symbols.jsx"
 
 const UNKNOWN_SYMBOL = {
     rune: "ᚷᛁᚾᚾᚢᚾ",
@@ -38,7 +11,7 @@ const UNKNOWN_SYMBOL = {
 
 export default function BaseSymbol({base, className}) {
     const symbolKey = base?.symbol
-    const symbol = SYMBOLS[symbolKey] ?? UNKNOWN_SYMBOL
+    const symbol = BASE_SYMBOLS[symbolKey] ?? UNKNOWN_SYMBOL
 
     return (
         <svg

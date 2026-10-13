@@ -41,13 +41,24 @@
     }
 }
 
+/* Селект основи й кнопка редагування поруч; селект займає все, що лишилось */
+.SelectRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+
+    & > :first-child {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* Відступи навколо дає саме вікно (Modal) — тут лише проміжки між полями */
 .Form {
-    position: relative;
-    isolation: isolate;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    padding: 44px 36px 36px;
 }
 
 .Error {
@@ -56,11 +67,5 @@
 
     &:empty {
         display: none;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .Form {
-        transition: none;
     }
 }

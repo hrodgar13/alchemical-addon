@@ -16,12 +16,15 @@ import styles from "./modal.module.css"
  *  title — обов'язковий: Dialog.Title стає доступною назвою вікна для скрінрідера.
  *  Вміст (форма, кнопки дій) — через children.
  *
+ *  onOpenChangeComplete(open) — після завершення анімації відкриття/закриття. Скидай тут дані,
+ *  які показує вікно: якщо скинути їх одразу в onOpenChange, вміст зміниться посеред зникнення.
+ *
  *  initialFocus — ref елемента, який отримає фокус при відкритті (напр. перше поле форми).
  *  Без нього фокус стає на перший інтерактивний елемент — це хрестик.
  * */
-export default function Modal({open, onOpenChange, title, description, initialFocus, children}) {
+export default function Modal({open, onOpenChange, onOpenChangeComplete, title, description, initialFocus, children}) {
     return (
-        <Dialog.Root open={open} onOpenChange={onOpenChange}>
+        <Dialog.Root open={open} onOpenChange={onOpenChange} onOpenChangeComplete={onOpenChangeComplete}>
             <Dialog.Portal>
                 <Dialog.Backdrop className={styles.Backdrop} />
                 <Dialog.Viewport className={styles.Viewport}>

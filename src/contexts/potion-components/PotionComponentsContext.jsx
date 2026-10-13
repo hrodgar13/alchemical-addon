@@ -123,14 +123,14 @@ function PotionComponentProvider({children}) {
         }
     }
 
+    // Помилку не ловимо: її показує форма, яка викликала збереження.
+    // Повертаємо збережену основу — з id, якщо вона нова
     async function addOrEditBase(base) {
-        try {
-            //TODO there will be save to API
-            const savedBase = {...base, id: base.id ?? crypto.randomUUID()}
-            dispatch({type: BASE_SAVED, payload: savedBase})
-        } catch (err) {
-            dispatch({type: ERROR, payload: `An Error occured while saving Base: ${err.message}`})
-        }
+        //TODO there will be save to API
+        const savedBase = {...base, id: base.id ?? crypto.randomUUID()}
+        dispatch({type: BASE_SAVED, payload: savedBase})
+
+        return savedBase
     }
 
     return (

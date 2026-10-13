@@ -23,7 +23,8 @@ const ACTION_RESET = "reset"
 
 const initialState = {
     whereWeCook: FIELD_INSTRUMENTS,
-    base: null,
+    // Лише id: саму основу беремо з каталогу під час рендеру, тож її редагування одразу видно в рецепті
+    baseId: null,
     ingredients: [],
     distill: false,
     // Підтверджені, але ще не збережені на сервері зміни зілля (назва, опис, згар)
@@ -43,7 +44,7 @@ function reducer(state, action) {
                 distill: action.payload === FIELD_INSTRUMENTS ? false : state.distill,
             }
         case ACTION_BASE_CHANGED:
-            return {...state, base: action.payload}
+            return {...state, baseId: action.payload}
         case ACTION_DISTILL_CHANGED:
             return {...state, distill: action.payload}
         case ACTION_ADD_NEW_INGREDIENT:
@@ -90,8 +91,10 @@ function reducer(state, action) {
 
 function PotionBrewProvider({children}) {
     const [state, dispatch] = useReducer(reducer, initialState)
-    const {whereWeCook, base, ingredients, distill} = state
-    const {brewedPotions, saveBrewedPotion} = usePotionComponents()
+    const {whereWeCook, baseId, ingredients, distill} = state
+    const {bases, brewedPotions, saveBrewedPotion} = usePotionComponents()
+
+    const base = bases.find(base => base.id === baseId) ?? null
 
     const difficulty = difficultyCalculator(whereWeCook, base, ingredients, distill)
     const message = PotionValidation(difficulty, whereWeCook, base, ingredients)
@@ -117,9 +120,10 @@ function PotionBrewProvider({children}) {
     }
 
     function setBase(newBase) {
-        if (base === newBase) return
+        const newBaseId = newBase?.id ?? null
+        if (baseId === newBaseId) return
 
-        dispatch({type: ACTION_BASE_CHANGED, payload: newBase})
+        dispatch({type: ACTION_BASE_CHANGED, payload: newBaseId})
     }
 
     function setDistill(newDistillValue) {

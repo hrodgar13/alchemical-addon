@@ -1,3 +1,18 @@
+/* Підпис — як у спільного Input */
+.Field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.Label {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+
 .Trigger {
     display: flex;
     align-items: center;
@@ -58,7 +73,8 @@
 }
 
 .Positioner {
-    z-index: 10;
+    /* Вище за модалку (100): селект може бути у формі всередині неї */
+    z-index: 200;
     outline: none;
 }
 
