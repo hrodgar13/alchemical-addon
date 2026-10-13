@@ -40,3 +40,32 @@
         animation: none;
     }
 }
+
+/* Селект основи й кнопка редагування поруч; селект займає все, що лишилось */
+.SelectRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+
+    & > :first-child {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
+/* Відступи навколо дає саме вікно (Modal) — тут лише проміжки між полями */
+.Form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.Error {
+    color: var(--color-danger);
+    font-size: 14px;
+
+    &:empty {
+        display: none;
+    }
+}
