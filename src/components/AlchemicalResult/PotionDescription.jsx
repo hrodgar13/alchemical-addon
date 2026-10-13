@@ -6,7 +6,7 @@ import {parseDescription} from "../../rules/potion-description.js";
 
 import styles from './alchemical-result.module.css'
 
-export default function PotionDescription() {
+export default function PotionDescription({textareaRef}) {
     const {
         recipeKey,
         potion,
@@ -59,6 +59,7 @@ export default function PotionDescription() {
 
         {isEditing && <>
             <textarea
+                ref={textareaRef}
                 className={styles.DescriptionInput}
                 value={potionEdit.description}
                 onChange={event => changePotionEdit({description: event.target.value})}
