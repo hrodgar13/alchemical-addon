@@ -1,27 +1,26 @@
-import {Combobox} from '@base-ui/react/combobox'
-import styles from './select.module.css'
-
+import {Combobox} from "@base-ui/react/combobox"
+import styles from "./select.module.css"
 
 export default function Select({
     items,
     value,
     onSelectChange,
-    searchKeys = ['name'],
+    searchKeys = ["name"],
     additionalDisplayKeys = [],
     searchable = true,
     objectSelect = null,
 }) {
-    const {contains} = Combobox.useFilter({sensitivity: 'base'}) // 'base' = без урахування регістру
+    const {contains} = Combobox.useFilter({sensitivity: "base"}) // 'base' = без урахування регістру
 
     function filterItem(item, query) {
-        return searchKeys.some(key => contains(item, query, i => String(i[key] ?? '')))
+        return searchKeys.some(key => contains(item, query, i => String(i[key] ?? "")))
     }
 
     function getAdditionalText(item) {
         return additionalDisplayKeys
             .map(key => item[key])
-            .filter(itemValue => itemValue !== null && itemValue !== undefined && itemValue !== '')
-            .join(' · ')
+            .filter(itemValue => itemValue !== null && itemValue !== undefined && itemValue !== "")
+            .join(" · ")
     }
 
     return (
@@ -35,10 +34,10 @@ export default function Select({
         >
             <Combobox.Trigger className={styles.Trigger}>
                 <span className={styles.ValueText}>
-                    <Combobox.Value placeholder={`Оберіть${objectSelect ? ' ' +  objectSelect : '...'}`}/>
+                    <Combobox.Value placeholder={`Оберіть${objectSelect ? " " + objectSelect : "..."}`} />
                 </span>
                 <Combobox.Icon className={styles.Icon}>
-                    <ChevronIcon/>
+                    <ChevronIcon />
                 </Combobox.Icon>
             </Combobox.Trigger>
 
@@ -47,13 +46,11 @@ export default function Select({
                     <Combobox.Popup className={styles.Popup}>
                         {searchable && (
                             <div className={styles.SearchWrapper}>
-                                <Combobox.Input className={styles.Search} placeholder="Пошук..."/>
+                                <Combobox.Input className={styles.Search} placeholder="Пошук..." />
                             </div>
                         )}
 
-                        <Combobox.Empty className={styles.Empty}>
-                            Нічого не знайдено
-                        </Combobox.Empty>
+                        <Combobox.Empty className={styles.Empty}>Нічого не знайдено</Combobox.Empty>
 
                         <Combobox.List className={styles.List}>
                             {item => {
@@ -62,7 +59,7 @@ export default function Select({
                                 return (
                                     <Combobox.Item key={item.id} value={item} className={styles.Item}>
                                         <Combobox.ItemIndicator className={styles.ItemIndicator}>
-                                            <CheckIcon/>
+                                            <CheckIcon />
                                         </Combobox.ItemIndicator>
                                         <span className={styles.ItemText}>
                                             {item.name}
@@ -84,8 +81,13 @@ export default function Select({
 function ChevronIcon() {
     return (
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                  strokeLinejoin="round"/>
+            <path
+                d="M2.5 4.5L6 8L9.5 4.5"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
         </svg>
     )
 }
@@ -93,8 +95,13 @@ function ChevronIcon() {
 function CheckIcon() {
     return (
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-            <path d="M2 6.5L4.75 9L10 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
-                  strokeLinejoin="round"/>
+            <path
+                d="M2 6.5L4.75 9L10 3"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            />
         </svg>
     )
 }

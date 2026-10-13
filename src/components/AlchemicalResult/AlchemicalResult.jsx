@@ -1,9 +1,9 @@
-import styles from './alchemical-result.module.css'
-import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
-import IngredientEffect from "./IngredientEffect.jsx";
-import PotionDescription from "./PotionDescription.jsx";
-import {flushSync} from "react-dom";
-import {useRef} from "react";
+import styles from "./alchemical-result.module.css"
+import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx"
+import IngredientEffect from "./IngredientEffect.jsx"
+import PotionDescription from "./PotionDescription.jsx"
+import {flushSync} from "react-dom"
+import {useRef} from "react"
 
 export default function AlchemicalResult() {
     const {base, ingredientEffects, potionEdit, changePotionEdit} = usePotionBrew()
@@ -30,17 +30,23 @@ export default function AlchemicalResult() {
         textarea.focus()
 
         textarea.setSelectionRange(cursorPosition, cursorPosition)
-
     }
 
-    return <div className={styles.AlchemicalResult}>
-        <ul className={styles.IngredientsEffects}>
-            {base && <li>"{base.alchemicalWord}"</li>}
-            {/* Один рядок — один унікальний інгредієнт: однакові слоти вже складені разом */}
-            {ingredientEffects.map(effect =>
-                <IngredientEffect key={effect.ingredient.id} canInsert={isEditing} effect={effect} onInsertTag={handleInsertTag}/>
-            )}
-        </ul>
-        <PotionDescription textareaRef={textareaRef}/>
-    </div>
+    return (
+        <div className={styles.AlchemicalResult}>
+            <ul className={styles.IngredientsEffects}>
+                {base && <li>"{base.alchemicalWord}"</li>}
+                {/* Один рядок — один унікальний інгредієнт: однакові слоти вже складені разом */}
+                {ingredientEffects.map(effect => (
+                    <IngredientEffect
+                        key={effect.ingredient.id}
+                        canInsert={isEditing}
+                        effect={effect}
+                        onInsertTag={handleInsertTag}
+                    />
+                ))}
+            </ul>
+            <PotionDescription textareaRef={textareaRef} />
+        </div>
+    )
 }

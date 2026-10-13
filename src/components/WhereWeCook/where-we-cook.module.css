@@ -44,7 +44,9 @@
 .SkyLayer {
     position: absolute;
     inset: 0;
-    transition: translate 900ms ease-in-out, opacity 900ms ease-in-out;
+    transition:
+        translate 900ms ease-in-out,
+        opacity 900ms ease-in-out;
 }
 
 /* Ніч: найнасиченіша зліва, ледве доходить праворуч */
@@ -148,7 +150,9 @@
     width: var(--switch-width);
     height: var(--switch-height);
     background-color: var(--color-surface);
-    transition: background-color 150ms ease, border-color 150ms ease;
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease;
     border-radius: calc(var(--switch-height) / 2);
     cursor: pointer;
 
@@ -166,9 +170,9 @@
     background-color: var(--color-btn);
     box-shadow: 0 0 0 2px var(--color-btn);
     transition:
-            translate 150ms ease,
-            background-color 150ms ease,
-            box-shadow 150ms ease;
+        translate 150ms ease,
+        background-color 150ms ease,
+        box-shadow 150ms ease;
 
     [data-station] > & {
         translate: calc(var(--switch-width) - var(--thumb-size) - 2 * var(--switch-inset)) 0;

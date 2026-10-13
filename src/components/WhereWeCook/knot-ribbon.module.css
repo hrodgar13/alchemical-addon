@@ -17,10 +17,12 @@
     padding: 0 14px;
     background-color: var(--color-bg);
     color: color-mix(in srgb, var(--color-text) 45%, transparent);
-    font-family: 'Noto Sans Runic', 'Segoe UI Historic', sans-serif;
+    font-family: "Noto Sans Runic", "Segoe UI Historic", sans-serif;
     font-size: 16px;
     letter-spacing: 2px;
     line-height: 1;
     white-space: nowrap;
-    transition: background-color 0.3s, color 0.3s;
+    transition:
+        background-color 0.3s,
+        color 0.3s;
 }

@@ -1,13 +1,13 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState} from "react"
 
 function getInitialIsDark() {
-    const storedTheme = localStorage.getItem('theme')
+    const storedTheme = localStorage.getItem("theme")
 
-    if (storedTheme === 'dark' || storedTheme === 'light') {
-        return storedTheme === 'dark'
+    if (storedTheme === "dark" || storedTheme === "light") {
+        return storedTheme === "dark"
     }
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
 }
 
 export function useTheme() {
@@ -19,8 +19,8 @@ export function useTheme() {
 
     useEffect(() => {
         document.documentElement.classList.toggle("dark", isDark)
-        localStorage.setItem('theme', isDark ? 'dark' : 'light')
-    }, [isDark]);
+        localStorage.setItem("theme", isDark ? "dark" : "light")
+    }, [isDark])
 
     return {isDark, toggleTheme}
 }

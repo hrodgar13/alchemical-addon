@@ -1,4 +1,4 @@
-import {useTheme} from "../hooks/useTheme.js";
+import {useTheme} from "../hooks/useTheme.js"
 
 function Header() {
     const {isDark, toggleTheme} = useTheme()
@@ -12,7 +12,7 @@ function Header() {
                 className="theme-mode-btn"
                 aria-label={isDark ? "Увімкнути світлу тему" : "Увімкнути темну тему"}
             >
-                {isDark ? '🌙' : '☀️'}
+                {isDark ? "🌙" : "☀️"}
             </button>
         </header>
     )

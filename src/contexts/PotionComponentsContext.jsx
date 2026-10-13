@@ -1,23 +1,22 @@
-import {createContext, useContext, useEffect, useReducer} from "react";
+import {createContext, useContext, useEffect, useReducer} from "react"
 import {
     BASES,
     BREWED_POTIONS,
     FIELD_INSTRUMENTS,
     INGREDIENT_RARITIES,
     MOCK_INGREDIENTS,
-    STATION
-} from "../static/static.js";
+    STATION,
+} from "../static/static.js"
 
 const PotionComponentsContext = createContext()
 
-const ACTION_LOADING = 'loading'
-const BASE_LOADED = 'base/loaded'
-const ERROR = 'error'
-const INGREDIENTS_LOADED = 'ingredients/loaded'
-const BREWED_POTIONS_LOADED = 'brewedPotions/loaded'
-const BREWED_POTION_SAVED = 'brewedPotion/saved'
-const FINISHED = 'finished'
-
+const ACTION_LOADING = "loading"
+const BASE_LOADED = "base/loaded"
+const ERROR = "error"
+const INGREDIENTS_LOADED = "ingredients/loaded"
+const BREWED_POTIONS_LOADED = "brewedPotions/loaded"
+const BREWED_POTION_SAVED = "brewedPotion/saved"
+const FINISHED = "finished"
 
 const initialState = {
     cookPlaces: [FIELD_INSTRUMENTS, STATION],
@@ -26,7 +25,7 @@ const initialState = {
     ingredientRarities: INGREDIENT_RARITIES,
     brewedPotions: [],
     isLoading: false,
-    errors: []
+    errors: [],
 }
 
 function reducer(state, action) {
@@ -45,8 +44,8 @@ function reducer(state, action) {
             return {
                 ...state,
                 brewedPotions: isExisting
-                    ? state.brewedPotions.map(potion => potion.id === action.payload.id ? action.payload : potion)
-                    : [...state.brewedPotions, action.payload]
+                    ? state.brewedPotions.map(potion => (potion.id === action.payload.id ? action.payload : potion))
+                    : [...state.brewedPotions, action.payload],
             }
         }
         case ERROR:
@@ -54,26 +53,16 @@ function reducer(state, action) {
         case FINISHED:
             return {...state, isLoading: false}
 
-
-
         default:
-            throw new Error('Unknown Action type in Potion Components context')
+            throw new Error("Unknown Action type in Potion Components context")
     }
 }
 
 function PotionComponentProvider({children}) {
-    const [{
-        cookPlaces,
-        bases,
-        ingredients,
-        ingredientRarities,
-        brewedPotions,
-        isLoading,
-        errors
-    }, dispatch] = useReducer(reducer, initialState)
+    const [{cookPlaces, bases, ingredients, ingredientRarities, brewedPotions, isLoading, errors}, dispatch] =
+        useReducer(reducer, initialState)
 
     useEffect(() => {
-
         dispatch({type: ACTION_LOADING})
 
         async function fetchBases() {
@@ -107,16 +96,12 @@ function PotionComponentProvider({children}) {
         }
 
         async function fetchAll() {
-            await Promise.all([
-                fetchBases(),
-                fetchIngredients(),
-                fetchBrewedPotions()
-            ])
+            await Promise.all([fetchBases(), fetchIngredients(), fetchBrewedPotions()])
             dispatch({type: FINISHED})
         }
 
         fetchAll()
-    }, []);
+    }, [])
 
     async function saveBrewedPotion(potion) {
         try {
@@ -129,16 +114,18 @@ function PotionComponentProvider({children}) {
     }
 
     return (
-        <PotionComponentsContext.Provider value={{
-            cookPlaces,
-            bases,
-            ingredients,
-            ingredientRarities,
-            brewedPotions,
-            isLoading,
-            errors,
-            saveBrewedPotion
-        }}>
+        <PotionComponentsContext.Provider
+            value={{
+                cookPlaces,
+                bases,
+                ingredients,
+                ingredientRarities,
+                brewedPotions,
+                isLoading,
+                errors,
+                saveBrewedPotion,
+            }}
+        >
             {children}
         </PotionComponentsContext.Provider>
     )
@@ -146,7 +133,7 @@ function PotionComponentProvider({children}) {
 
 function usePotionComponents() {
     const context = useContext(PotionComponentsContext)
-    if (context === undefined) throw new Error('Context used outside of PotionComponents Provider')
+    if (context === undefined) throw new Error("Context used outside of PotionComponents Provider")
     return context
 }
 

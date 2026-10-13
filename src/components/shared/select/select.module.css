@@ -14,7 +14,10 @@
     font-size: 18px;
     text-align: left;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+    transition:
+        background-color 0.3s,
+        color 0.3s,
+        border-color 0.3s;
 
     &:hover {
         border-color: var(--color-outline-accent);
@@ -71,7 +74,9 @@
     box-shadow: 0 8px 24px rgb(0 0 0 / 0.2);
     overflow: hidden;
     transform-origin: var(--transform-origin);
-    transition: opacity 150ms ease, scale 150ms ease;
+    transition:
+        opacity 150ms ease,
+        scale 150ms ease;
 
     &[data-starting-style],
     &[data-ending-style] {

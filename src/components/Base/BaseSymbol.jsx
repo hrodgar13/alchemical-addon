@@ -4,32 +4,36 @@
 
 const SYMBOLS = {
     aqua: {
-        rune: 'ᚨᚲᚢᚨ',
-        shape: <polygon points="15,10 105,10 60,88"/>,
+        rune: "ᚨᚲᚢᚨ",
+        shape: <polygon points="15,10 105,10 60,88" />,
     },
     spiritus: {
-        rune: 'ᛊᛈᛁᚱᛁᛏᚢᛊ',
-        shape: <>
-            <polygon points="60,10 105,88 15,88"/>
-            <line x1="5" y1="66" x2="115" y2="66"/>
-        </>,
+        rune: "ᛊᛈᛁᚱᛁᛏᚢᛊ",
+        shape: (
+            <>
+                <polygon points="60,10 105,88 15,88" />
+                <line x1="5" y1="66" x2="115" y2="66" />
+            </>
+        ),
     },
     olium: {
-        rune: 'ᛟᛚᛁᚢᛗ',
-        shape: <polygon points="60,10 105,88 15,88"/>,
+        rune: "ᛟᛚᛁᚢᛗ",
+        shape: <polygon points="60,10 105,88 15,88" />,
     },
     vinum: {
-        rune: 'ᚢᛁᚾᚢᛗ',
-        shape: <>
-            <polygon points="15,10 105,10 60,88"/>
-            <line x1="5" y1="32" x2="115" y2="32"/>
-        </>,
+        rune: "ᚢᛁᚾᚢᛗ",
+        shape: (
+            <>
+                <polygon points="15,10 105,10 60,88" />
+                <line x1="5" y1="32" x2="115" y2="32" />
+            </>
+        ),
     },
 }
 
 const UNKNOWN_SYMBOL = {
-    rune: 'ᚷᛁᚾᚾᚢᚾ',
-    shape: <circle cx="60" cy="49" r="39"/>,
+    rune: "ᚷᛁᚾᚾᚢᚾ",
+    shape: <circle cx="60" cy="49" r="39" />,
 }
 
 export default function BaseSymbol({base, className}) {
@@ -39,7 +43,7 @@ export default function BaseSymbol({base, className}) {
     return (
         <svg
             // key змінюється разом із символом — SVG перемонтовується і CSS-анімація появи грає знову
-            key={symbolKey ?? 'unknown'}
+            key={symbolKey ?? "unknown"}
             className={className}
             viewBox="0 0 120 140"
             fill="none"

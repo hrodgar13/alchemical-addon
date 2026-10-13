@@ -6,19 +6,19 @@ import {
     TIME_UNIT_LABELS,
     TIME_UNIT_PERMANENT,
     TIME_UNIT_PERMANENT_LABEL,
-    TIME_UNITS_ORDER
-} from "../static/static.js";
+    TIME_UNITS_ORDER,
+} from "../static/static.js"
 
 /*
-*  Ефекти інгредієнтів зілля — конвеєр з чистих кроків:
-*  слоти → (1) внесок кожного слота → (2) групування за інгредієнтом → (3) модифікатори всього зілля
-*
-*  Результат — дані, а не рядки: шаблони опису братимуть звідси числа,
-*  а в текст для показу перетворює окрема formatIngredientEffect.
-*
-*  Час: ступка (і для 4-го інгредієнта теж) та крит множать кількість, дистиляція — стрибок на наступну одиницю.
-*  Крит. успіх не враховується — кидок робиться за столом, застосунок про нього не знає.
-* */
+ *  Ефекти інгредієнтів зілля — конвеєр з чистих кроків:
+ *  слоти → (1) внесок кожного слота → (2) групування за інгредієнтом → (3) модифікатори всього зілля
+ *
+ *  Результат — дані, а не рядки: шаблони опису братимуть звідси числа,
+ *  а в текст для показу перетворює окрема formatIngredientEffect.
+ *
+ *  Час: ступка (і для 4-го інгредієнта теж) та крит множать кількість, дистиляція — стрибок на наступну одиницю.
+ *  Крит. успіх не враховується — кидок робиться за столом, застосунок про нього не знає.
+ * */
 export function calculateIngredientEffects({ingredients, distill}) {
     const filledSlots = ingredients.filter(slot => slot.ingredient && slot.rarity)
 
@@ -35,7 +35,7 @@ export function calculateIngredientEffects({ingredients, distill}) {
             case MEASURE_TIME:
                 return mergeTime({ingredient, groupParts, distill})
             default:
-                throw new Error('UNKNOWN MEASURE TYPE')
+                throw new Error("UNKNOWN MEASURE TYPE")
         }
     })
 }
@@ -47,7 +47,7 @@ function calculateSlotPart({ingredient, rarity, ground}) {
         return {
             ingredient,
             die: ground ? rarity.ground_dice_of_effect : rarity.dice_of_effect,
-            count: ground ? GROUND_INGREDIENT_MULTIPLIER : 1
+            count: ground ? GROUND_INGREDIENT_MULTIPLIER : 1,
         }
     }
 
@@ -92,12 +92,12 @@ function dieSize(die) {
     return Number(die.slice(1))
 }
 
-const pluralRules = new Intl.PluralRules('uk')
+const pluralRules = new Intl.PluralRules("uk")
 
 // (4) Текст для показу: «1к12 + 4к10», «32 хвилини», «назавжди»
 export function formatIngredientEffect(effect) {
     if (effect.measure === MEASURE_DICE) {
-        return effect.dice.map(({die, count}) => `${count}${die}`).join(' + ')
+        return effect.dice.map(({die, count}) => `${count}${die}`).join(" + ")
     }
 
     if (effect.unit === TIME_UNIT_PERMANENT) return TIME_UNIT_PERMANENT_LABEL

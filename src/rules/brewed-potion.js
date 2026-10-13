@@ -1,12 +1,12 @@
 /*
-*  Зілля визначається основою + набором унікальних інгредієнтів (без порядку й кількості).
-*  Тому ключ рецепту — id основи і відсортовані унікальні id інгредієнтів:
-*  «Підсніжник + 2 кігті» і «2 підсніжники + кіготь» дають однаковий ключ.
-* */
+ *  Зілля визначається основою + набором унікальних інгредієнтів (без порядку й кількості).
+ *  Тому ключ рецепту — id основи і відсортовані унікальні id інгредієнтів:
+ *  «Підсніжник + 2 кігті» і «2 підсніжники + кіготь» дають однаковий ключ.
+ * */
 export function buildRecipeKey({baseId, ingredientsIds}) {
     const uniqueIds = [...new Set(ingredientsIds.map(String))].sort()
 
-    return `${baseId}:${uniqueIds.join(',')}`
+    return `${baseId}:${uniqueIds.join(",")}`
 }
 
 // Ключ поточного рецепту; null — поки рецепт неповний (немає основи або є порожній слот)
@@ -26,7 +26,7 @@ export function findBrewedPotion({recipeKey, brewedPotions}) {
 
 // «Дати Сила Холод» — слово основи і слова унікальних інгредієнтів
 export function buildAlchemicalSentence({base, ingredientEffects}) {
-    if (!base) return ''
+    if (!base) return ""
 
-    return [base.alchemicalWord, ...ingredientEffects.map(effect => effect.ingredient.alchemicalWord)].join(' ')
+    return [base.alchemicalWord, ...ingredientEffects.map(effect => effect.ingredient.alchemicalWord)].join(" ")
 }

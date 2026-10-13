@@ -11,7 +11,7 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 30px
+    gap: 30px;
 }
 
 /* Символ вибраної основи — по центру секції, на фоні */

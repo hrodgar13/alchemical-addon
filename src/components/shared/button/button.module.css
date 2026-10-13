@@ -16,7 +16,10 @@
     white-space: nowrap;
     cursor: pointer;
     user-select: none;
-    transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    transition:
+        background-color 150ms ease,
+        border-color 150ms ease,
+        box-shadow 150ms ease;
 
     &:hover {
         background-color: color-mix(in srgb, var(--color-header-bg), var(--color-header-text) 15%);
@@ -32,7 +35,7 @@
     }
 
     /* Кнопка-перемикач (напр. «Згар») у ввімкненому стані */
-    &[aria-pressed='true'] {
+    &[aria-pressed="true"] {
         background-color: var(--color-header-text);
         color: var(--color-header-bg);
     }

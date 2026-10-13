@@ -1,24 +1,24 @@
-import {createContext, useContext, useReducer} from "react";
-import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, STATION} from "../static/static.js";
-import difficultyCalculator from "../rules/difficulty-calculator.js";
-import PotionValidation from "../rules/potion-validation.js";
-import {calculateIngredientEffects} from "../rules/ingredient-effects.js";
-import {buildAlchemicalSentence, findBrewedPotion, getRecipeKey} from "../rules/brewed-potion.js";
-import {toEditableDescription, toStoredDescription} from "../rules/potion-description.js";
-import {usePotionComponents} from "./PotionComponentsContext.jsx";
+import {createContext, useContext, useReducer} from "react"
+import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, STATION} from "../static/static.js"
+import difficultyCalculator from "../rules/difficulty-calculator.js"
+import PotionValidation from "../rules/potion-validation.js"
+import {calculateIngredientEffects} from "../rules/ingredient-effects.js"
+import {buildAlchemicalSentence, findBrewedPotion, getRecipeKey} from "../rules/brewed-potion.js"
+import {toEditableDescription, toStoredDescription} from "../rules/potion-description.js"
+import {usePotionComponents} from "./PotionComponentsContext.jsx"
 
-const ACTION_BASE_CHANGED = 'base/changed'
-const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
-const ACTION_DISTILL_CHANGED = 'distill/changed'
-const ACTION_ADD_NEW_INGREDIENT = 'ingredient/add'
-const ACTION_EDIT_EXISTING_INGREDIENT = 'ingredient/edit'
-const ACTION_REMOVE_INGREDIENT = 'ingredient/remove'
-const ACTION_POTION_DRAFT_CHANGED = 'potionDraft/changed'
-const ACTION_POTION_EDIT_STARTED = 'potionEdit/started'
-const ACTION_POTION_EDIT_CHANGED = 'potionEdit/changed'
-const ACTION_POTION_EDIT_CONFIRMED = 'potionEdit/confirmed'
-const ACTION_POTION_EDIT_CANCELLED = 'potionEdit/cancelled'
-const ACTION_RESET = 'reset'
+const ACTION_BASE_CHANGED = "base/changed"
+const ACTION_WHERE_WE_COOK_CHANGED = "whereWeCook/changed"
+const ACTION_DISTILL_CHANGED = "distill/changed"
+const ACTION_ADD_NEW_INGREDIENT = "ingredient/add"
+const ACTION_EDIT_EXISTING_INGREDIENT = "ingredient/edit"
+const ACTION_REMOVE_INGREDIENT = "ingredient/remove"
+const ACTION_POTION_DRAFT_CHANGED = "potionDraft/changed"
+const ACTION_POTION_EDIT_STARTED = "potionEdit/started"
+const ACTION_POTION_EDIT_CHANGED = "potionEdit/changed"
+const ACTION_POTION_EDIT_CONFIRMED = "potionEdit/confirmed"
+const ACTION_POTION_EDIT_CANCELLED = "potionEdit/cancelled"
+const ACTION_RESET = "reset"
 
 const PotionBrewContext = createContext()
 
@@ -33,7 +33,7 @@ const initialState = {
     potionEdit: null,
 }
 
-const EMPTY_POTION = {name: '', description: '', isScorched: false}
+const EMPTY_POTION = {name: "", description: "", isScorched: false}
 
 function reducer(state, action) {
     switch (action.type) {
@@ -41,7 +41,7 @@ function reducer(state, action) {
             return {
                 ...state,
                 whereWeCook: action.payload,
-                distill: action.payload === FIELD_INSTRUMENTS ? false : state.distill
+                distill: action.payload === FIELD_INSTRUMENTS ? false : state.distill,
             }
         case ACTION_BASE_CHANGED:
             return {...state, base: action.payload}
@@ -50,7 +50,6 @@ function reducer(state, action) {
         case ACTION_ADD_NEW_INGREDIENT:
             return {...state, ingredients: [...state.ingredients, action.payload]}
         case ACTION_EDIT_EXISTING_INGREDIENT:
-
             const updatedIngredientList = state.ingredients.map(ingredient => {
                 if (ingredient.ingredientCombinationId === action.payload.ingredientCombinationId) {
                     return {...action.payload}
@@ -59,13 +58,14 @@ function reducer(state, action) {
                 return ingredient
             })
 
-
             return {...state, ingredients: updatedIngredientList}
 
         case ACTION_REMOVE_INGREDIENT:
             return {
                 ...state,
-                ingredients: state.ingredients.filter(ingredient => ingredient.ingredientCombinationId !== action.payload)
+                ingredients: state.ingredients.filter(
+                    ingredient => ingredient.ingredientCombinationId !== action.payload,
+                ),
             }
 
         case ACTION_POTION_DRAFT_CHANGED:
@@ -84,7 +84,7 @@ function reducer(state, action) {
             return {...initialState, whereWeCook: state.whereWeCook}
 
         default:
-            throw new Error('Unknown action type in potion context reducer')
+            throw new Error("Unknown action type in potion context reducer")
     }
 }
 
@@ -139,14 +139,13 @@ function PotionBrewProvider({children}) {
             ingredientCombinationId: newIngredientCombinationId,
             ingredient: null,
             rarity: INGREDIENT_RARITIES[0],
-            ground: isExtraIngredient
+            ground: isExtraIngredient,
         }
 
         dispatch({type: ACTION_ADD_NEW_INGREDIENT, payload: newIngredient})
     }
 
     function editIngredientCombination(payload) {
-
         dispatch({type: ACTION_EDIT_EXISTING_INGREDIENT, payload})
     }
 
@@ -160,8 +159,8 @@ function PotionBrewProvider({children}) {
             payload: {
                 recipeKey,
                 name: potion.name,
-                description: toEditableDescription(potion.description, ingredientEffects)
-            }
+                description: toEditableDescription(potion.description, ingredientEffects),
+            },
         })
     }
 
@@ -176,8 +175,8 @@ function PotionBrewProvider({children}) {
                 ...potion,
                 recipeKey,
                 name: potionEdit.name.trim(),
-                description: toStoredDescription(potionEdit.description.trim(), ingredientEffects)
-            }
+                description: toStoredDescription(potionEdit.description.trim(), ingredientEffects),
+            },
         })
     }
 
@@ -199,7 +198,7 @@ function PotionBrewProvider({children}) {
             description: potion.description,
             isScorched: potion.isScorched,
             baseId: base.id,
-            ingredientsIds: ingredientEffects.map(effect => effect.ingredient.id)
+            ingredientsIds: ingredientEffects.map(effect => effect.ingredient.id),
         })
 
         dispatch({type: ACTION_RESET})
@@ -231,7 +230,7 @@ function PotionBrewProvider({children}) {
                 confirmPotionEdit,
                 cancelPotionEdit,
                 toggleScorched,
-                brewPotion
+                brewPotion,
             }}
         >
             {children}
@@ -241,7 +240,7 @@ function PotionBrewProvider({children}) {
 
 function usePotionBrew() {
     const context = useContext(PotionBrewContext)
-    if (context === undefined) throw new Error('Context used outside of PotionBrewProvider')
+    if (context === undefined) throw new Error("Context used outside of PotionBrewProvider")
     return context
 }
 
