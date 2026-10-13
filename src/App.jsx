@@ -3,7 +3,7 @@ import WhereWeCook from "./components/WhereWeCook/WhereWeCook.jsx";
 import Ingredients from "./components/Ingredients/Ingredients.jsx";
 import Distill from "./components/Distill/Distill.jsx";
 import Difficulty from "./components/DifficultyArrow/Difficulty.jsx";
-import AlchemicalResult from "./components/AlchemicalResult.jsx";
+import AlchemicalResult from "./components/AlchemicalResult/AlchemicalResult.jsx";
 import Base from "./components/Base/Base.jsx";
 import {PotionBrewProvider} from "./contexts/PotionBrewContext.jsx";
 

@@ -19,10 +19,14 @@ const initialState = {
     distill: false,
 }
 
-function reducer(state, action){
+function reducer(state, action) {
     switch (action.type) {
         case ACTION_WHERE_WE_COOK_CHANGED:
-            return {...state, whereWeCook: action.payload, distill: action.payload === FIELD_INSTRUMENTS ? false : state.distill}
+            return {
+                ...state,
+                whereWeCook: action.payload,
+                distill: action.payload === FIELD_INSTRUMENTS ? false : state.distill
+            }
         case ACTION_BASE_CHANGED:
             return {...state, base: action.payload}
         case ACTION_DISTILL_CHANGED:
@@ -59,9 +63,9 @@ function PotionBrewProvider({children}) {
     const message = PotionValidation(difficulty, whereWeCook, base, ingredients, distill)
 
     function setWhereWeCook(newWhereWeCook) {
-        if(whereWeCook === newWhereWeCook) return
+        if (whereWeCook === newWhereWeCook) return
 
-        dispatch({type: ACTION_WHERE_WE_COOK_CHANGED, payload: newWhereWeCook })
+        dispatch({type: ACTION_WHERE_WE_COOK_CHANGED, payload: newWhereWeCook})
     }
 
     function setBase(newBase) {
@@ -83,7 +87,12 @@ function PotionBrewProvider({children}) {
         // 4-й інгредієнт можливий лише коли перетерті всі — тому він створюється одразу перетертим
         const isExtraIngredient = ingredients.length === MAX_UNGRIND
 
-        const newIngredient = {ingredientCombinationId: newIngredientCombinationId, ingredient: null, rarity: INGREDIENT_RARITIES[0], ground: isExtraIngredient}
+        const newIngredient = {
+            ingredientCombinationId: newIngredientCombinationId,
+            ingredient: null,
+            rarity: INGREDIENT_RARITIES[0],
+            ground: isExtraIngredient
+        }
 
         dispatch({type: ACTION_ADD_NEW_INGREDIENT, payload: newIngredient})
     }
@@ -121,7 +130,7 @@ function PotionBrewProvider({children}) {
 
 function usePotionBrew() {
     const context = useContext(PotionBrewContext)
-    if(context === undefined) throw new Error('Context used outside of PotionBrewProvider')
+    if (context === undefined) throw new Error('Context used outside of PotionBrewProvider')
     return context
 }
 

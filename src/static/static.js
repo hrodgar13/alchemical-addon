@@ -68,6 +68,8 @@ const INGREDIENT_RARITIES = [
 ]
 
 const GROUND_INGREDIENT_DICE_AMOUNT = 2
+
+const DISTILLED_DICE_AMOUNT = 2
 const POTION_INITIAL_DIFFICULTY = 8
 const LIMIT_DIFFICULTY_IN_FIELD_INSTRUMENTS = 25
 
@@ -104,6 +106,17 @@ const TIME_UNIT_WEEK = 'week'
 const TIME_UNIT_MONTH = 'month'
 const TIME_UNIT_YEAR = 'year'
 const TIME_UNIT_PERMANENT = 'permanent'
+
+const TIME_UNITS_RATING = [
+    {place: 1, unit: TIME_UNIT_ROUND},
+    {place: 2, unit: TIME_UNIT_MINUTE},
+    {place: 3, unit: TIME_UNIT_HOUR},
+    {place: 4, unit: TIME_UNIT_DAY},
+    {place: 5, unit: TIME_UNIT_WEEK},
+    {place: 6, unit: TIME_UNIT_MONTH},
+    {place: 7, unit: TIME_UNIT_YEAR},
+    {place: 8, unit: TIME_UNIT_PERMANENT},
+]
 
 
 const MOCK_INGREDIENTS = [
@@ -214,5 +227,7 @@ export {
     GROUND_INGREDIENT_ADDITION_TO_DIFFICULTY,
     STATION_DIFFICULTY_BENEFIT,
     MAX_UNGRIND,
-    DISTILLATION_DIFFICULTY
+    DISTILLATION_DIFFICULTY,
+    DISTILLED_DICE_AMOUNT,
+    TIME_UNITS_RATING
 }
