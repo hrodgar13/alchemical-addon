@@ -1,0 +1,100 @@
+/* Рамка лежить під вмістом блоку на всю його площу.
+   Колір — текст на 15%, змішаний з фоном сторінки, а не з прозорістю:
+   так стрічка в кутах не темнішає там, де її частини накладаються одна на одну */
+.Frame {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    color: color-mix(in srgb, var(--color-text) 15%, var(--color-bg));
+    pointer-events: none;
+    transition: color 0.3s;
+}
+
+.Corner {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+}
+
+.TopLeft {
+    top: 0;
+    left: 0;
+}
+
+.TopRight {
+    top: 0;
+    right: 0;
+    scale: -1 1;
+}
+
+.BottomLeft {
+    bottom: 0;
+    left: 0;
+    scale: 1 -1;
+}
+
+.BottomRight {
+    bottom: 0;
+    right: 0;
+    scale: -1 -1;
+}
+
+/* Краї — між кутами; візерунок повторюється, а не розтягується */
+.EdgeHorizontal {
+    position: absolute;
+    left: 32px;
+    right: 32px;
+    width: calc(100% - 64px);
+    height: 6.5px;
+}
+
+.Top {
+    top: 0;
+}
+
+.Bottom {
+    bottom: 0;
+    scale: 1 -1;
+}
+
+.EdgeVertical {
+    position: absolute;
+    top: 32px;
+    bottom: 32px;
+    width: 6.5px;
+    height: calc(100% - 64px);
+}
+
+.Left {
+    left: 0;
+}
+
+.Right {
+    right: 0;
+    scale: -1 1;
+}
+
+/* Напис на верхній стрічці: фон сторінки під ним розриває лінії */
+.Title {
+    position: absolute;
+    top: 3px;
+    left: 50%;
+    translate: -50% -50%;
+    padding: 0 10px;
+    background-color: var(--color-bg);
+    font-family: "Noto Sans Runic", "Segoe UI Historic", sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    line-height: 1;
+    white-space: nowrap;
+    transition:
+        background-color 0.3s,
+        color 0.3s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Frame,
+    .Title {
+        transition: none;
+    }
+}

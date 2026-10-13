@@ -1,0 +1,90 @@
+/* Рамка лежить під вмістом блоку на всю його площу.
+   Колір — той самий, що й у фонах основи та дистиляції (текст на 15%),
+   але через color-mix, а не opacity: так фон під написом лишається суцільним і закриває лозу */
+.Frame {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    color: color-mix(in srgb, var(--color-text) 15%, transparent);
+    pointer-events: none;
+}
+
+.Corner {
+    position: absolute;
+    width: 64px;
+    height: 64px;
+}
+
+.TopLeft {
+    top: 0;
+    left: 0;
+}
+
+.TopRight {
+    top: 0;
+    right: 0;
+    scale: -1 1;
+}
+
+.BottomLeft {
+    bottom: 0;
+    left: 0;
+    scale: 1 -1;
+}
+
+.BottomRight {
+    bottom: 0;
+    right: 0;
+    scale: -1 -1;
+}
+
+/* Краї — між кутами; візерунок повторюється, тож лоза не розтягується */
+.EdgeHorizontal {
+    position: absolute;
+    left: 64px;
+    right: 64px;
+    width: calc(100% - 128px);
+    height: 12px;
+}
+
+.Top {
+    top: 0;
+}
+
+.Bottom {
+    bottom: 0;
+    scale: 1 -1;
+}
+
+.EdgeVertical {
+    position: absolute;
+    top: 64px;
+    bottom: 64px;
+    width: 12px;
+    height: calc(100% - 128px);
+}
+
+.Left {
+    left: 0;
+}
+
+.Right {
+    right: 0;
+    scale: -1 1;
+}
+
+/* Напис на верхній лінії рамки: фон сторінки під ним «розриває» лозу */
+.Title {
+    position: absolute;
+    top: 6px;
+    left: 50%;
+    translate: -50% -50%;
+    padding: 0 12px;
+    background-color: var(--color-bg);
+    font-family: "Noto Sans Runic", "Segoe UI Historic", sans-serif;
+    font-size: 18px;
+    letter-spacing: 3px;
+    line-height: 1;
+    white-space: nowrap;
+    transition: background-color 0.3s;
+}

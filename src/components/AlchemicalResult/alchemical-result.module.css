@@ -1,0 +1,119 @@
+.AlchemicalResult {
+    /* position + isolation — щоб різьблена рамка лягала під вміст блоку, але не під сторінку */
+    position: relative;
+    isolation: isolate;
+    grid-column: 1/5;
+    /* Відступ від рамки, щоб вміст не налазив на вузли в кутах */
+    padding: 28px;
+    display: flex;
+    gap: 16px;
+}
+
+.IngredientsEffects {
+    width: 20%;
+    list-style: none;
+}
+
+/* Колір як у рамки — розділювач з тієї ж «різьби» */
+.Divider {
+    flex-shrink: 0;
+    align-self: stretch;
+    color: color-mix(in srgb, var(--color-text) 15%, var(--color-bg));
+}
+
+.IngredientEffect {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px;
+}
+
+/* Назва та опис зілля */
+.Description {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 12px;
+}
+
+.Sentence {
+    color: var(--color-text-muted);
+    font-size: 14px;
+    font-style: italic;
+}
+
+.TitleRow {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.Name {
+    flex: 1;
+    min-width: 0;
+    font-size: 22px;
+    overflow-wrap: anywhere;
+}
+
+.NameInput,
+.DescriptionInput {
+    border: 1px solid var(--color-outline);
+    border-radius: 8px;
+    background-color: var(--color-surface);
+    padding: 4px 8px;
+
+    &:focus-visible {
+        outline: 2px solid var(--color-outline);
+        outline-offset: 1px;
+    }
+}
+
+.NameInput {
+    flex: 1;
+    min-width: 0;
+    height: 32px;
+    font-size: 18px;
+}
+
+.DescriptionInput {
+    width: 100%;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.Text {
+    white-space: pre-line;
+}
+
+/* Підставлені з рецепту кубики й тривалість */
+.Value {
+    font-weight: 700;
+    color: var(--color-outline);
+}
+
+.Hint {
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+/* Попередження про невідомі теги: текст основним кольором (читабельний),
+   а самі теги — акцентним золотим, щоб їх було легко знайти в описі */
+.Warning {
+    font-size: 14px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.UnknownTag {
+    font-weight: 700;
+    color: var(--color-outline-accent);
+}
+
+.Scorched {
+    color: var(--color-text-muted);
+    font-style: italic;
+}

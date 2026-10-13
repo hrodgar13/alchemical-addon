@@ -1,0 +1,27 @@
+.Distill {
+    /* position + isolation — щоб реторта на фоні лягала під вміст секції, але не під сторінку */
+    position: relative;
+    isolation: isolate;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Реторта — по центру секції, на фоні */
+.Symbol {
+    position: absolute;
+    z-index: -1;
+    inset: 8px;
+    margin: auto;
+    width: calc(100% - 16px);
+    max-width: 280px;
+    height: calc(100% - 16px);
+    color: var(--color-text);
+    opacity: 0.15;
+    pointer-events: none;
+}

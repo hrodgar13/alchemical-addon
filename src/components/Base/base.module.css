@@ -1,0 +1,42 @@
+.Base {
+    /* position + isolation — щоб символ на фоні лягав під вміст секції, але не під сторінку */
+    position: relative;
+    isolation: isolate;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    /* Висота з запасом — щоб рунічний підпис символу на фоні був під селектом, а не за ним */
+    min-height: 260px;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* Символ вибраної основи — по центру секції, на фоні */
+.Symbol {
+    position: absolute;
+    z-index: -1;
+    inset: 8px 0;
+    margin: auto;
+    height: calc(100% - 16px);
+    width: auto;
+    color: var(--color-text);
+    opacity: 0.15;
+    pointer-events: none;
+    animation: symbol-appear 300ms ease;
+}
+
+@keyframes symbol-appear {
+    from {
+        opacity: 0;
+        scale: 0.9;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Symbol {
+        animation: none;
+    }
+}
