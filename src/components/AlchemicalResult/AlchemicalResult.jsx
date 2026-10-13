@@ -1,6 +1,7 @@
 import styles from './alchemical-result.module.css'
 import {usePotionBrew} from "../../contexts/PotionBrewContext.jsx";
 import IngredientEffect from "./IngredientEffect.jsx";
+import PotionDescription from "./PotionDescription.jsx";
 
 export default function AlchemicalResult() {
     const {base, ingredientEffects} = usePotionBrew()
@@ -13,6 +14,6 @@ export default function AlchemicalResult() {
                 <IngredientEffect key={effect.ingredient.id} effect={effect}/>
             )}
         </ul>
-        <div>Description with name</div>
+        <PotionDescription/>
     </div>
 }

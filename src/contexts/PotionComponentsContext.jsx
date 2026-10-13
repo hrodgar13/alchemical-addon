@@ -15,6 +15,7 @@ const BASE_LOADED = 'base/loaded'
 const ERROR = 'error'
 const INGREDIENTS_LOADED = 'ingredients/loaded'
 const BREWED_POTIONS_LOADED = 'brewedPotions/loaded'
+const BREWED_POTION_SAVED = 'brewedPotion/saved'
 const FINISHED = 'finished'
 
 
@@ -38,6 +39,16 @@ function reducer(state, action) {
             return {...state, ingredients: action.payload}
         case BREWED_POTIONS_LOADED:
             return {...state, brewedPotions: action.payload}
+        case BREWED_POTION_SAVED: {
+            const isExisting = state.brewedPotions.some(potion => potion.id === action.payload.id)
+
+            return {
+                ...state,
+                brewedPotions: isExisting
+                    ? state.brewedPotions.map(potion => potion.id === action.payload.id ? action.payload : potion)
+                    : [...state.brewedPotions, action.payload]
+            }
+        }
         case ERROR:
             return {...state, errors: [...state.errors, action.payload]}
         case FINISHED:
@@ -107,6 +118,16 @@ function PotionComponentProvider({children}) {
         fetchAll()
     }, []);
 
+    async function saveBrewedPotion(potion) {
+        try {
+            //TODO there will be save to API (insert або update за id)
+            const savedPotion = {...potion, id: potion.id ?? crypto.randomUUID()}
+            dispatch({type: BREWED_POTION_SAVED, payload: savedPotion})
+        } catch (err) {
+            dispatch({type: ERROR, payload: `An Error occurred while saving Brewed potion: ${err.message}`})
+        }
+    }
+
     return (
         <PotionComponentsContext.Provider value={{
             cookPlaces,
@@ -115,7 +136,8 @@ function PotionComponentProvider({children}) {
             ingredientRarities,
             brewedPotions,
             isLoading,
-            errors
+            errors,
+            saveBrewedPotion
         }}>
             {children}
         </PotionComponentsContext.Provider>

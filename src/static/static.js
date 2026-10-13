@@ -88,11 +88,12 @@ const GROUND_INGREDIENT_ADDITION_TO_DIFFICULTY = 1
 *
 *  Якщо взяти 3 кігтя ведмедя Легендарної якості, 1 перетерти а 2 інших = ні то зілля буде тривати: 8 * 2 + 8 + 8 = 32 хвилини
 *
-*  If add 4th grinded ingredient, instead of doubling the amount of time, the potion will jump on higher time unit instead.
-*
 *  Наприклад, якщо взяти 3 Легендарні кігті ведмедя, перемолоти, - то час дії зілля буде: 8 * 2 + 8 * 2 + 8 * 2 = 48 хвилинам
 *
-*  Та якщо додати 4й кіготь - то зілля буде працбвати: 8 + 8 + 8 + 8 = 32 години
+*  4th grinded ingredient has no special rule - its time is doubled like any other: 4 кігті перетерті = 8 * 2 * 4 = 64 хвилини
+*
+*  Distillation makes the potion jump to the next time unit (amount stays the same): 4 кігті перетерті + дистиляція = 64 години.
+*  Jump above a year = permanent effect. Critical success doubles the amount (not tracked by the app).
 *
 * */
 
@@ -195,9 +196,11 @@ const BREWED_POTIONS = [
     {
         id: 1,
         name: 'Зілля Сили Холоду',
-        description: 'Еффект: Випивши зілля, істота на %TIME_AMOUNT% %TIME_MEASURE% завдає додаткові %DICES% шкоди Холодом заклинаннями, які наносять шкоду Холодом.',
+        // %ing:3% — тег інгредієнта за id; у звичайному режимі на його місці число з поточного рецепту
+        description: 'Випивши зілля, істота протягом %ing:3% завдає додаткові %ing:2% шкоди Холодом заклинаннями, які наносять шкоду Холодом.',
         ingredientsIds: [3, 2],
-        baseId: 1
+        baseId: 1,
+        isScorched: false
     }
 ]
 
