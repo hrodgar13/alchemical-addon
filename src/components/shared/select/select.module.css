@@ -179,6 +179,45 @@
     }
 }
 
+/*
+ *  Пункт «+ Додати…» — останній у списку, але прилипає до низу панелі (sticky у прокручуваному .List),
+ *  тож його видно завжди, хоч би скільки було опцій. Фон обов'язковий — інакше під ним просвічують пункти.
+ * */
+.Create {
+    position: sticky;
+    bottom: -4px; /* компенсує padding списку, щоб під пунктом не було щілини */
+    display: grid;
+    grid-template-columns: 16px 1fr;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 8px 10px;
+    border-top: 1px solid color-mix(in srgb, var(--color-outline) 40%, var(--color-surface));
+    border-radius: 0 0 6px 6px;
+    background-color: var(--color-surface);
+    color: var(--color-outline);
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+
+    &[data-highlighted] {
+        background-color: var(--color-btn);
+        color: var(--color-btn-text);
+    }
+}
+
+.CreateText {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.CreateQuery {
+    font-weight: 400;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .Icon,
     .Popup {

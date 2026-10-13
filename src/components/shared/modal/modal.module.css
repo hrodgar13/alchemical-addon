@@ -1,0 +1,74 @@
+/* Затемнення сторінки під вікном */
+.Backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background-color: rgb(0 0 0 / 0.45);
+    transition: opacity 200ms ease;
+
+    &[data-starting-style],
+    &[data-ending-style] {
+        opacity: 0;
+    }
+}
+
+/* Шар на весь екран, що центрує вікно; якщо вміст вищий за екран — прокручується він, а не сторінка */
+.Viewport {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: grid;
+    place-items: center;
+    padding: 24px 16px;
+    overflow-y: auto;
+}
+
+/* Фон вікна — колір сторінки: на ньому різьблена рамка виглядає так само, як на блоці зілля */
+.Popup {
+    position: relative;
+    isolation: isolate;
+    width: min(480px, 100%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 36px 32px 32px;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    box-shadow: 0 16px 48px rgb(0 0 0 / 0.35);
+    outline: none;
+    transition:
+        opacity 200ms ease,
+        scale 200ms ease;
+
+    &[data-starting-style],
+    &[data-ending-style] {
+        opacity: 0;
+        scale: 0.96;
+    }
+}
+
+.Header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.Title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--color-header-text);
+}
+
+.Description {
+    margin-top: -8px;
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Backdrop,
+    .Popup {
+        transition: none;
+    }
+}

@@ -40,3 +40,27 @@
         animation: none;
     }
 }
+
+.Form {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 44px 36px 36px;
+}
+
+.Error {
+    color: var(--color-danger);
+    font-size: 14px;
+
+    &:empty {
+        display: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Form {
+        transition: none;
+    }
+}

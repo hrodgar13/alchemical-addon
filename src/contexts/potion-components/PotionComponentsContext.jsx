@@ -16,6 +16,7 @@ const INGREDIENTS_LOADED = "ingredients/loaded"
 const BREWED_POTIONS_LOADED = "brewedPotions/loaded"
 const BREWED_POTION_SAVED = "brewedPotion/saved"
 const FINISHED = "finished"
+const BASE_SAVED = "base/saved"
 
 const initialState = {
     cookPlaces: [FIELD_INSTRUMENTS, STATION],
@@ -45,6 +46,16 @@ function reducer(state, action) {
                 brewedPotions: isExisting
                     ? state.brewedPotions.map(potion => (potion.id === action.payload.id ? action.payload : potion))
                     : [...state.brewedPotions, action.payload],
+            }
+        }
+        case BASE_SAVED: {
+            const isExist = state.bases.some(base => base.id === action.payload.id)
+
+            return {
+                ...state,
+                bases: isExist
+                    ? state.bases.map(base => (base.id === action.payload.id ? action.payload : base))
+                    : [...state.bases, action.payload],
             }
         }
         case ERROR:
@@ -112,6 +123,16 @@ function PotionComponentProvider({children}) {
         }
     }
 
+    async function addOrEditBase(base) {
+        try {
+            //TODO there will be save to API
+            const savedBase = {...base, id: base.id ?? crypto.randomUUID()}
+            dispatch({type: BASE_SAVED, payload: savedBase})
+        } catch (err) {
+            dispatch({type: ERROR, payload: `An Error occured while saving Base: ${err.message}`})
+        }
+    }
+
     return (
         <PotionComponentsContext.Provider
             value={{
@@ -123,6 +144,7 @@ function PotionComponentProvider({children}) {
                 isLoading,
                 errors,
                 saveBrewedPotion,
+                addOrEditBase,
             }}
         >
             {children}

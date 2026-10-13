@@ -1,5 +1,12 @@
+import {useRef, useState} from "react"
 import {Combobox} from "@base-ui/react/combobox"
 import styles from "./select.module.css"
+
+/*
+ *  Пункт «+ Додати…» — справжній пункт списку: до нього можна дійти стрілками й вибрати Enter.
+ *  Але це маркер, а не значення: при виборі викликаємо onCreate, а value селекта не змінюється.
+ * */
+const CREATE_ITEM = {id: Symbol("create")}
 
 export default function Select({
     items,
@@ -9,10 +16,21 @@ export default function Select({
     additionalDisplayKeys = [],
     searchable = true,
     objectSelect = null,
+    createLabel = "",
+    onCreate = null,
 }) {
     const {contains} = Combobox.useFilter({sensitivity: "base"}) // 'base' = без урахування регістру
+    const [query, setQuery] = useState("")
+    const trimmedQuery = query.trim()
+    // Запит, з яким натиснули «Додати»; null — створення не очікується. Ref, бо на рендер не впливає
+    const pendingCreateRef = useRef(null)
+
+    // Маркер «Додати» — завжди останній і завжди проходить фільтр пошуку
+    const allItems = onCreate ? [...items, CREATE_ITEM] : items
 
     function filterItem(item, query) {
+        if (item === CREATE_ITEM) return true
+
         return searchKeys.some(key => contains(item, query, i => String(i[key] ?? "")))
     }
 
@@ -23,13 +41,38 @@ export default function Select({
             .join(" · ")
     }
 
+    function handleValueChange(newValue) {
+        if (newValue === CREATE_ITEM) {
+            pendingCreateRef.current = trimmedQuery
+            return
+        }
+
+        onSelectChange(newValue)
+    }
+
+    /*
+     *  onCreate — лише коли список повністю закрився (анімація завершилась).
+     *  Якщо відкрити модалку раніше, вона блокує сторінку посеред закриття списку,
+     *  і селект «застрягає»: після закриття модалки він більше не відкривається.
+     *  Введене в пошук передаємо далі — форма створення підставить його як назву.
+     * */
+    function handleOpenChangeComplete(isOpen) {
+        if (isOpen || pendingCreateRef.current === null) return
+
+        const createQuery = pendingCreateRef.current
+        pendingCreateRef.current = null
+        onCreate(createQuery)
+    }
+
     return (
         <Combobox.Root
+            onInputValueChange={setQuery}
             value={value}
-            onValueChange={onSelectChange}
-            itemToStringLabel={item => item.name}
+            onValueChange={handleValueChange}
+            onOpenChangeComplete={handleOpenChangeComplete}
+            itemToStringLabel={item => item.name ?? createLabel}
             isItemEqualToValue={(item, value) => item.id === value.id}
-            items={items}
+            items={allItems}
             filter={searchable ? filterItem : null}
         >
             <Combobox.Trigger className={styles.Trigger}>
@@ -54,6 +97,20 @@ export default function Select({
 
                         <Combobox.List className={styles.List}>
                             {item => {
+                                if (item === CREATE_ITEM) {
+                                    return (
+                                        <Combobox.Item key="create" value={item} className={styles.Create}>
+                                            <span aria-hidden="true">+</span>
+                                            <span className={styles.CreateText}>
+                                                {createLabel}
+                                                {trimmedQuery && (
+                                                    <span className={styles.CreateQuery}> «{trimmedQuery}»</span>
+                                                )}
+                                            </span>
+                                        </Combobox.Item>
+                                    )
+                                }
+
                                 const additionalText = getAdditionalText(item)
 
                                 return (
