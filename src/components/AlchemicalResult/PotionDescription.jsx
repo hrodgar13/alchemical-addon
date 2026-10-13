@@ -1,5 +1,6 @@
 import {Fragment, useId} from "react"
 import Button from "../shared/button/Button.jsx"
+import Input from "../shared/input/Input.jsx"
 import {CheckIcon, CloseIcon, PencilIcon} from "../shared/icons/Icons.jsx"
 import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import {findUnknownTags, parseDescription} from "../../rules/potion-description.js"
@@ -40,8 +41,8 @@ export default function PotionDescription({textareaRef}) {
 
             <div className={styles.TitleRow}>
                 {isEditing ? (
-                    <input
-                        className={styles.NameInput}
+                    <Input
+                        className={styles.NameField}
                         value={potionEdit.name}
                         onChange={event => changePotionEdit({name: event.target.value})}
                         placeholder={alchemicalSentence}

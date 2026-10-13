@@ -2,7 +2,7 @@ import styles from "./alchemical-result.module.css"
 import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import IngredientEffect from "./IngredientEffect.jsx"
 import PotionDescription from "./PotionDescription.jsx"
-import CarvedFrame, {CarvedDivider} from "./CarvedFrame.jsx"
+import CarvedFrame, {CarvedDivider} from "../shared/carved-frame/CarvedFrame.jsx"
 import {flushSync} from "react-dom"
 import {useRef} from "react"
 
