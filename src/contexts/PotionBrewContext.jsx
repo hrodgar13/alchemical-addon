@@ -2,6 +2,7 @@ import {createContext, useContext, useReducer} from "react";
 import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, MAX_UNGRIND, STATION} from "../static/static.js";
 import difficultyCalculator from "../rules/difficulty-calculator.js";
 import PotionValidation from "../rules/potion-validation.js";
+import {calculateIngredientEffects} from "../rules/ingredient-effects.js";
 
 const ACTION_BASE_CHANGED = 'base/changed'
 const ACTION_WHERE_WE_COOK_CHANGED = 'whereWeCook/changed'
@@ -61,6 +62,7 @@ function PotionBrewProvider({children}) {
     const [{whereWeCook, base, ingredients, distill}, dispatch] = useReducer(reducer, initialState)
     const difficulty = difficultyCalculator(whereWeCook, base, ingredients, distill)
     const message = PotionValidation(difficulty, whereWeCook, base, ingredients, distill)
+    const ingredientEffects = calculateIngredientEffects({ingredients, distill})
 
     function setWhereWeCook(newWhereWeCook) {
         if (whereWeCook === newWhereWeCook) return
@@ -115,6 +117,7 @@ function PotionBrewProvider({children}) {
                 distill,
                 difficulty,
                 message,
+                ingredientEffects,
                 setWhereWeCook,
                 setBase,
                 setDistill,

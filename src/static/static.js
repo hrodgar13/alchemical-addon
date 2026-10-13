@@ -67,9 +67,10 @@ const INGREDIENT_RARITIES = [
     }
 ]
 
-const GROUND_INGREDIENT_DICE_AMOUNT = 2
+// Множники ефекту — діють і на кількість кубиків, і на тривалість
+const GROUND_INGREDIENT_MULTIPLIER = 2
 
-const DISTILLED_DICE_AMOUNT = 2
+const DISTILLED_MULTIPLIER = 2
 const POTION_INITIAL_DIFFICULTY = 8
 const LIMIT_DIFFICULTY_IN_FIELD_INSTRUMENTS = 25
 
@@ -107,16 +108,30 @@ const TIME_UNIT_MONTH = 'month'
 const TIME_UNIT_YEAR = 'year'
 const TIME_UNIT_PERMANENT = 'permanent'
 
-const TIME_UNITS_RATING = [
-    {place: 1, unit: TIME_UNIT_ROUND},
-    {place: 2, unit: TIME_UNIT_MINUTE},
-    {place: 3, unit: TIME_UNIT_HOUR},
-    {place: 4, unit: TIME_UNIT_DAY},
-    {place: 5, unit: TIME_UNIT_WEEK},
-    {place: 6, unit: TIME_UNIT_MONTH},
-    {place: 7, unit: TIME_UNIT_YEAR},
-    {place: 8, unit: TIME_UNIT_PERMANENT},
+// Одиниці часу по зростанню — позиція в масиві і є рангом, стрибок = наступний елемент
+const TIME_UNITS_ORDER = [
+    TIME_UNIT_ROUND,
+    TIME_UNIT_MINUTE,
+    TIME_UNIT_HOUR,
+    TIME_UNIT_DAY,
+    TIME_UNIT_WEEK,
+    TIME_UNIT_MONTH,
+    TIME_UNIT_YEAR,
+    TIME_UNIT_PERMANENT,
 ]
+
+// Форми для Intl.PluralRules('uk'): 1 хвилина / 2 хвилини / 5 хвилин (other — для дробів)
+const TIME_UNIT_LABELS = {
+    [TIME_UNIT_ROUND]: {one: 'раунд', few: 'раунди', many: 'раундів', other: 'раунду'},
+    [TIME_UNIT_MINUTE]: {one: 'хвилина', few: 'хвилини', many: 'хвилин', other: 'хвилини'},
+    [TIME_UNIT_HOUR]: {one: 'година', few: 'години', many: 'годин', other: 'години'},
+    [TIME_UNIT_DAY]: {one: 'день', few: 'дні', many: 'днів', other: 'дня'},
+    [TIME_UNIT_WEEK]: {one: 'тиждень', few: 'тижні', many: 'тижнів', other: 'тижня'},
+    [TIME_UNIT_MONTH]: {one: 'місяць', few: 'місяці', many: 'місяців', other: 'місяця'},
+    [TIME_UNIT_YEAR]: {one: 'рік', few: 'роки', many: 'років', other: 'року'},
+}
+
+const TIME_UNIT_PERMANENT_LABEL = 'назавжди'
 
 
 const MOCK_INGREDIENTS = [
@@ -208,7 +223,7 @@ export {
     STATION,
     BASES,
     INGREDIENT_RARITIES,
-    GROUND_INGREDIENT_DICE_AMOUNT,
+    GROUND_INGREDIENT_MULTIPLIER,
     POTION_INITIAL_DIFFICULTY,
     LIMIT_DIFFICULTY_IN_FIELD_INSTRUMENTS,
     MEASURE_DICE,
@@ -228,6 +243,8 @@ export {
     STATION_DIFFICULTY_BENEFIT,
     MAX_UNGRIND,
     DISTILLATION_DIFFICULTY,
-    DISTILLED_DICE_AMOUNT,
-    TIME_UNITS_RATING
+    DISTILLED_MULTIPLIER,
+    TIME_UNITS_ORDER,
+    TIME_UNIT_LABELS,
+    TIME_UNIT_PERMANENT_LABEL
 }

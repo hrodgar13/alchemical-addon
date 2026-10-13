@@ -1,15 +1,12 @@
-import calculateDiceOrTime from "../../rules/calculate-dice-or-time.js";
 import Button from "../shared/button/Button.jsx";
+import {formatIngredientEffect} from "../../rules/ingredient-effects.js";
 
 import styles from './alchemical-result.module.css'
 
-export default function IngredientEffect({ingredientCombination, distilled}) {
-    const {ingredient, rarity, ground} = ingredientCombination
+export default function IngredientEffect({effect}) {
 
-    const diceOrTime = calculateDiceOrTime(ingredient, rarity, ground, distilled)
-
-    return <div className={styles.IngredientEffect}>
-        "{ingredient.alchemicalWord}"
-        <Button>{diceOrTime}</Button>
-    </div>
+    return <li className={styles.IngredientEffect}>
+        "{effect.ingredient.alchemicalWord}"
+        <Button>{formatIngredientEffect(effect)}</Button>
+    </li>
 }
