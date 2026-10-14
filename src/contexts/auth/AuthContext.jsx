@@ -4,7 +4,7 @@ import {logOut, signInWithGoogle, subscribeToAuthChanges} from "../../api/auth.j
 
 const initState = {
     user: null,
-    // false — Firebase ще не повідомив, чи є збережена сесія. До цього не можна вирішувати, пускати чи ні
+    // false until Firebase reports whether a saved session exists; access can't be decided before that
     isAuthReady: false,
 }
 
@@ -19,7 +19,7 @@ function reducer(state, action) {
     }
 }
 
-// Об'єкт Firebase великий і з методами — у стан беремо лише прості дані, які потрібні застосунку
+// Keep only the plain fields the app needs, not the whole Firebase user object
 function toAppUser(firebaseUser) {
     if (!firebaseUser) return null
 
@@ -33,9 +33,8 @@ function AuthProvider({children}) {
     const isAuthenticated = user !== null
 
     /*
-     *  Єдине місце, де змінюється стан входу. login і logout лише просять Firebase,
-     *  а він сам повідомляє про результат сюди — так стан не розійдеться з реальною сесією.
-     *  Ефект доречний: це підписка на зовнішню систему, а повернена функція — відписка.
+     *  The only place auth state changes: login and logout just ask Firebase, which reports
+     *  the result here, so the state never drifts from the real session.
      * */
     useEffect(() => {
         return subscribeToAuthChanges(firebaseUser => {
@@ -43,7 +42,7 @@ function AuthProvider({children}) {
         })
     }, [])
 
-    // Помилку (напр. закрите вікно Google) не ловимо — її покаже форма входу
+    // Errors (e.g. a closed Google popup) aren't caught here: the login form shows them
     async function login() {
         await signInWithGoogle()
     }

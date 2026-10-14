@@ -1,5 +1,5 @@
 import {useEffect, useReducer} from "react"
-import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, STATION} from "../../static/static.js"
+import {INGREDIENT_RARITIES} from "../../static/static.js"
 import {PotionComponentsContext} from "./potion-components-context.js"
 import {useAuth} from "../../hooks/useAuth.js"
 import {getBases, saveBase} from "../../api/bases.js"
@@ -17,17 +17,15 @@ const BASE_SAVED = "base/saved"
 const INGREDIENT_SAVED = "ingredient/saved"
 
 const initialState = {
-    cookPlaces: [FIELD_INSTRUMENTS, STATION],
     bases: [],
     ingredients: [],
     ingredientRarities: INGREDIENT_RARITIES,
     brewedPotions: [],
-    // true з самого початку — щоб до першої відповіді Firestore не мигнув порожній каталог
+    // true from the start so an empty catalog doesn't flash before the first Firestore response
     isLoading: true,
     errors: [],
 }
 
-// Збережений запис: відомий id — замінюємо на місці, новий — додаємо в кінець
 function upsertById(list, item) {
     const isExisting = list.some(listItem => listItem.id === item.id)
 
@@ -61,15 +59,17 @@ function reducer(state, action) {
 }
 
 function PotionComponentProvider({children}) {
-    const [{cookPlaces, bases, ingredients, ingredientRarities, brewedPotions, isLoading, errors}, dispatch] =
-        useReducer(reducer, initialState)
-    // Провайдер живе на захищених сторінках, але в мить виходу user вже null — тоді нічого не вантажимо
+    const [{bases, ingredients, ingredientRarities, brewedPotions, isLoading, errors}, dispatch] = useReducer(
+        reducer,
+        initialState,
+    )
+    // The provider lives on protected pages, but user is already null at the moment of logout
     const uid = useAuth().user?.uid
 
     useEffect(() => {
         if (!uid) return
 
-        // Якщо uid зміниться (вихід і вхід іншим акаунтом), відповіді старого запиту вже не потрібні
+        // If uid changes (sign-out and sign-in with another account), stale responses are ignored
         let isCancelled = false
 
         function dispatchIfActive(action) {
@@ -102,9 +102,9 @@ function PotionComponentProvider({children}) {
     }, [uid])
 
     /*
-     *  Збереження: спершу чекаємо Firestore, потім оновлюємо стан — у списку лише те, що справді збереглось.
-     *  Помилку не ловимо: її показує той, хто викликав (форма; для зілля — варка не скидає рецепт).
-     *  Повертаємо збережений запис — з id від Firestore, якщо він новий.
+     *  Wait for Firestore before updating state, so the lists hold only what was really saved.
+     *  Errors aren't caught: the caller shows them (the form; a failed brew keeps the recipe).
+     *  Returns the saved record, with the Firestore id if it is new.
      * */
     async function saveBrewedPotion(potion) {
         const savedPotion = await saveBrewedPotionToDb(uid, potion)
@@ -130,7 +130,6 @@ function PotionComponentProvider({children}) {
     return (
         <PotionComponentsContext.Provider
             value={{
-                cookPlaces,
                 bases,
                 ingredients,
                 ingredientRarities,

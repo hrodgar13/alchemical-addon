@@ -32,8 +32,7 @@
     --color-text: #e8e5f0;
     --color-text-muted: #a9a6bc;
 
-    /* Той самий холодний бірюзовий тон, що й хедер, але світліший — щоб кнопки й стрілка
-       не губилися на темному фоні */
+    /* Lighter than the header so buttons and the arrow stand out on the dark background */
     --color-btn: #2b6e69;
     --color-btn-hover: #245c58;
 
@@ -106,7 +105,7 @@ button:focus-visible {
     outline-offset: 2px;
 }
 
-/* Хедер зверху, сторінка забирає решту висоти екрана — так вхід і 404 центруються по екрану */
+/* Header on top, the page fills the rest so login and 404 centre on screen */
 .app {
     min-height: 100dvh;
     display: flex;

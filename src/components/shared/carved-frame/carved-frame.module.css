@@ -1,6 +1,4 @@
-/* Рамка лежить під вмістом блоку на всю його площу.
-   Колір — текст на 15%, змішаний з фоном сторінки, а не з прозорістю:
-   так стрічка в кутах не темнішає там, де її частини накладаються одна на одну */
+/* Mixed with the page background, not transparent, so overlapping ribbon parts don't darken */
 .Frame {
     position: absolute;
     z-index: -1;
@@ -39,7 +37,6 @@
     scale: -1 -1;
 }
 
-/* Краї — між кутами; візерунок повторюється, а не розтягується */
 .EdgeHorizontal {
     position: absolute;
     left: 32px;
@@ -74,7 +71,7 @@
     scale: -1 1;
 }
 
-/* Напис на верхній стрічці: фон сторінки під ним розриває лінії */
+/* The page background under the label breaks the lines of the top band */
 .Title {
     position: absolute;
     top: 3px;

@@ -3,11 +3,8 @@ import {useAuth} from "../hooks/useAuth.js"
 import SpinnerFullPage from "./SpinnerFullPage/SpinnerFullPage.jsx"
 
 /*
- *  Поки Firebase відновлює сесію після перезавантаження, user ще null — без цієї перевірки
- *  залогіненого користувача на мить викидало б на /login. Тому спершу чекаємо isAuthReady.
- *
- *  Редирект прямо під час рендеру, а не в useEffect: захищена сторінка не встигає відмалюватись,
- *  а replace замінює запис в історії — «Назад» не поверне на сторінку, що знову перекине на вхід.
+ *  Wait for isAuthReady: until Firebase restores the session user is null and would be bounced to /login.
+ *  Redirect during render, not in useEffect, so the page never paints; replace keeps "Back" from looping.
  * */
 export default function ProtectedRoute({children}) {
     const {isAuthenticated, isAuthReady} = useAuth()

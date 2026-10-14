@@ -26,7 +26,7 @@
     font-size: clamp(32px, 6vw, 72px);
     letter-spacing: 0.08em;
     color: color-mix(in srgb, var(--color-outline) 70%, var(--color-bg));
-    /* Довгий рядок рун без пробілів — дозволяємо переноситися на вузьких екранах */
+    /* A long run of runes has no spaces: allow wrapping on narrow screens */
     overflow-wrap: anywhere;
 }
 
@@ -36,7 +36,6 @@
     color: var(--color-text-muted);
 }
 
-/* Посилання, що виглядає як кнопка сайту: руни зверху, переклад під ними */
 .Back {
     display: inline-flex;
     flex-direction: column;

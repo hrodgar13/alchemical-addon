@@ -1,11 +1,11 @@
 .Base {
-    /* position + isolation — щоб символ на фоні лягав під вміст секції, але не під сторінку */
+    /* isolate: the z-index: -1 backdrop sits under the content but not under the page */
     position: relative;
     isolation: isolate;
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* Висота з запасом — щоб рунічний підпис символу на фоні був під селектом, а не за ним */
+    /* Tall enough that the symbol's rune caption sits below the select, not behind it */
     min-height: 260px;
     text-align: center;
     padding: 20px;
@@ -14,7 +14,6 @@
     gap: 30px;
 }
 
-/* Символ вибраної основи — по центру секції, на фоні */
 .Symbol {
     position: absolute;
     z-index: -1;
@@ -41,7 +40,6 @@
     }
 }
 
-/* Селект основи й кнопка редагування поруч; селект займає все, що лишилось */
 .SelectRow {
     display: flex;
     align-items: center;
@@ -54,7 +52,6 @@
     }
 }
 
-/* Відступи навколо дає саме вікно (Modal) — тут лише проміжки між полями */
 .Form {
     display: flex;
     flex-direction: column;

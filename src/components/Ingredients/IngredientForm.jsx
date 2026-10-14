@@ -18,7 +18,7 @@ const MEASURE_OPTIONS = [
     {id: MEASURE_TIME, name: "Час", hint: "тривалість"},
 ]
 
-// «Перманентно» — не стартова одиниця, а результат стрибка дистиляції вище року
+// Permanent is not a starting unit: it is only reached by distilling past a year
 const TIME_UNIT_OPTIONS = TIME_UNITS_ORDER.filter(unit => unit !== TIME_UNIT_PERMANENT).map(unit => {
     const label = TIME_UNIT_LABELS[unit].few
 
@@ -29,11 +29,7 @@ const normalize = text => text.trim().toLowerCase()
 
 const findOption = (options, id) => options.find(option => option.id === id)
 
-/*
- *  Форма створення й редагування інгредієнта — як BaseForm.
- *  Тип ефекту й одиниця часу — керовані селекти: від типу залежить, чи показувати одиницю.
- *  Значення обох потрапляють у FormData через name.
- * */
+// The time unit select is shown only for time effects; both selects submit via `name`
 export default function IngredientForm({prefilledName = "", existingIngredient = null, onSaved}) {
     const {ingredients, addOrEditIngredient} = usePotionComponents()
     const [measureOption, setMeasureOption] = useState(
@@ -45,7 +41,7 @@ export default function IngredientForm({prefilledName = "", existingIngredient =
 
     const isTimeMeasure = measureOption.id === MEASURE_TIME
 
-    // Дублікати шукаємо серед інших інгредієнтів — редагований не конфліктує сам з собою
+    // Check duplicates only among other ingredients, so the edited one doesn't clash with itself
     const otherIngredients = ingredients.filter(ingredient => ingredient.id !== existingIngredient?.id)
 
     async function saveIngredientAction(previousState, formData) {
@@ -54,7 +50,7 @@ export default function IngredientForm({prefilledName = "", existingIngredient =
         const difficulty = Number(formData.get("difficulty"))
         const description = formData.get("description").trim()
         const effectMeasuresIn = formData.get("effect_measures_in")
-        // Поле одиниці є у формі лише для часових — для кубикових get() поверне null
+        // The unit field exists only for time effects; for dice effects get() returns null
         const timeUnits = effectMeasuresIn === MEASURE_TIME ? formData.get("time_units") : null
 
         const values = {name, alchemicalWord, difficulty, description}
@@ -75,13 +71,13 @@ export default function IngredientForm({prefilledName = "", existingIngredient =
             return {values, error: "Інгредієнт з такою назвою вже існує"}
         }
 
-        // Алхімічне слово — це тег %Слово% в описах зіль, тож воно мусить бути унікальним
+        // The alchemical word is the %Word% tag in potion descriptions, so it must be unique
         if (otherIngredients.some(ingredient => normalize(ingredient.alchemicalWord) === normalize(alchemicalWord))) {
             return {values, error: "Інгредієнт з таким Алхімічним словом вже існує"}
         }
 
         try {
-            // existingIngredient дає id і поля, яких форма не знає, — вони не загубляться при редагуванні
+            // Spreading existingIngredient keeps its id and any fields the form doesn't know about
             const savedIngredient = await addOrEditIngredient({
                 ...existingIngredient,
                 name,

@@ -2,7 +2,7 @@ import {getUserItems, saveUserItem} from "./user-collections.js"
 
 const BASES = "bases"
 
-// Firestore віддає документи в порядку id — для селекта сортуємо за назвою
+// Firestore returns documents ordered by id, so sort by name for the select
 export async function getBases(uid) {
     const bases = await getUserItems(uid, BASES)
 

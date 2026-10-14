@@ -2,18 +2,16 @@ import {Button as BaseButton} from "@base-ui/react/button"
 import styles from "./knot-button.module.css"
 
 /*
- *  Кругла кнопка-іконка, обплетена кельтським вузлом.
- *  Вузол — дві хвилясті нитки по колу (r = R ± A·sin(Nθ)), що перетинаються 2N разів
- *  і по черзі проходять одна над одною. «Над» — це повторно намальований шматочок верхньої нитки
- *  з ореолом кольору хедера, який розриває нижню нитку (та сама техніка, що й у кутах рамки).
- *  Іконку передаємо children; підпис — через aria-label, бо тексту в кнопці немає.
+ *  Celtic knot: two wavy strands r = R ± A·sin(Nθ) crossing 2N times. The "over" strand is a
+ *  redrawn piece with a header-coloured halo that cuts the strand beneath (same trick as the frame corners).
+ *  Pass the icon as children and the label via aria-label.
  * */
 const SIZE = 48
 const CENTER = SIZE / 2
 const RADIUS = 20.5
 const AMPLITUDE = 2.2
 const LOBES = 6
-const OVER_HALF_ANGLE = 0.16 // на скільки радіан у кожен бік від перетину малюємо «верхній» шматок
+const OVER_HALF_ANGLE = 0.16 // radians on each side of a crossing drawn as the "over" piece
 
 function point(angle, strand) {
     const radius = RADIUS + strand * AMPLITUDE * Math.sin(LOBES * angle)
@@ -31,7 +29,7 @@ function strandPath(strand, from = 0, to = 2 * Math.PI, steps = 144) {
 
 const STRANDS = [strandPath(1), strandPath(-1)]
 
-// На кожному перетині (sin = 0) зверху по черзі то одна, то друга нитка — так виходить плетіння
+// At each crossing (sin = 0) the strands take turns on top, which makes the weave
 const CROSSINGS = Array.from({length: LOBES * 2}, (_, k) => {
     const angle = (k * Math.PI) / LOBES
     const strand = k % 2 === 0 ? 1 : -1

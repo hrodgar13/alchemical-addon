@@ -32,7 +32,6 @@ export default function PotionDescription({textareaRef}) {
 
     const isEditing = potionEdit !== null
     const availableTags = ingredientEffects.map(effect => `%${effect.ingredient.alchemicalWord}%`).join(", ")
-    // Похідне значення — рахується з тексту під час рендеру, тож оновлюється з кожною набраною літерою
     const unknownTags = isEditing ? findUnknownTags(potionEdit.description, ingredientEffects) : []
 
     return (
@@ -92,7 +91,7 @@ export default function PotionDescription({textareaRef}) {
                     <p className={styles.Hint} id={tagsHintId}>
                         Теги цього зілля: {availableTags} — на їх місці будуть кубики й тривалість з рецепту.
                     </p>
-                    {/* role="status" — скрінрідер озвучить попередження, щойно воно з'явиться */}
+                    {/* role="status" makes screen readers announce the warning as soon as it appears */}
                     <p className={styles.Warning} role="status">
                         {unknownTags.length > 0 && (
                             <>
@@ -125,7 +124,7 @@ function DescriptionText({description, ingredientEffects}) {
         return <p className={styles.Hint}>Нове зілля — опису ще немає. Натисніть олівець, щоб описати його.</p>
     }
 
-    // Частини статичні в межах рендеру, тому індекс як key тут безпечний
+    // Parts are static within a render, so index keys are safe
     return (
         <p className={styles.Text}>
             {parseDescription(description, ingredientEffects).map((part, index) =>

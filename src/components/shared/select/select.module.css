@@ -1,4 +1,3 @@
-/* Підпис — як у спільного Input */
 .Field {
     display: flex;
     flex-direction: column;
@@ -73,7 +72,7 @@
 }
 
 .Positioner {
-    /* Вище за модалку (100): селект може бути у формі всередині неї */
+    /* Above the modal (100): a select can live in a form inside it */
     z-index: 200;
     outline: none;
 }
@@ -196,12 +195,12 @@
 }
 
 /*
- *  Пункт «+ Додати…» — останній у списку, але прилипає до низу панелі (sticky у прокручуваному .List),
- *  тож його видно завжди, хоч би скільки було опцій. Фон обов'язковий — інакше під ним просвічують пункти.
+ *  Sticky to the bottom of the scrolling .List so it's always visible;
+ *  needs a background so items don't show through.
  * */
 .Create {
     position: sticky;
-    bottom: -4px; /* компенсує padding списку, щоб під пунктом не було щілини */
+    bottom: -4px; /* offsets the list padding so no gap shows below */
     display: grid;
     grid-template-columns: 16px 1fr;
     align-items: center;

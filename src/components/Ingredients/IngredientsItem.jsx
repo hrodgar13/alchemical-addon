@@ -19,7 +19,7 @@ function IngredientsItem({
     const {ingredients, ingredientRarities} = usePotionComponents()
     const selectedIngredient = ingredientCombination.ingredient
     const [isModalOpen, setIsModalOpen] = useState(false)
-    // Що показує вікно: null — створення нового інгредієнта, об'єкт — редагування цього
+    // null = create a new ingredient, object = edit that ingredient
     const [editableIngredient, setEditableIngredient] = useState(null)
     const [prefilledName, setPrefilledName] = useState("")
 
@@ -38,7 +38,7 @@ function IngredientsItem({
         setIsModalOpen(true)
     }
 
-    // Скидаємо, коли вікно вже зникло: інакше заголовок і кнопка змінились би посеред анімації
+    // Reset only after the close animation, otherwise the title and button would change mid-animation
     function handleModalOpenChangeComplete(isOpen) {
         if (isOpen) return
 
@@ -46,8 +46,7 @@ function IngredientsItem({
         setPrefilledName("")
     }
 
-    // Новий інгредієнт одразу ставимо в цей слот. Відредагований — не треба:
-    // рецепт тримає лише id і сам бачить нові дані
+    // Put a newly created ingredient into this slot; an edited one needn't be: the recipe holds only the id
     function handleSaved(savedIngredient) {
         if (!editableIngredient) handleEditIngredient("ingredient", savedIngredient)
 
@@ -57,7 +56,7 @@ function IngredientsItem({
     return (
         <div className={`${styles.IngredientsItem} ${disabled ? styles.DisabledIngredient : ""}`}>
             <div className={`${styles.IngredientsItemHeader}`}>
-                <h3 className={styles.IngredientTitle}>Інградієнт {position}</h3>
+                <h3>Інградієнт {position}</h3>
                 <div>
                     <Button onClick={() => onRemoveIngredient(ingredientCombination.ingredientCombinationId)}>x</Button>
                 </div>
@@ -115,7 +114,7 @@ function IngredientsItem({
                 title={editableIngredient ? "Редагувати Інгредієнт" : "Новий Інгредієнт"}
                 description="Інгредієнт — одне алхімічне слово в реченні зілля"
             >
-                {/* key — інший інгредієнт означає нову форму: useActionState бере початковий стан лише при монтуванні */}
+                {/* useActionState reads its initial state only on mount, so a different ingredient needs a fresh form */}
                 <IngredientForm
                     key={editableIngredient?.id ?? "new"}
                     prefilledName={prefilledName}

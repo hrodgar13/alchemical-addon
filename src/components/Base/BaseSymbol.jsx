@@ -1,7 +1,3 @@
-// Алхімічний символ вибраної основи з рунічним підписом.
-// Невідома або не вибрана основа — заглушка: коло з написом ᚷᛁᚾᚾᚢᚾ.
-// Колір — з CSS-властивості `color` батька (currentColor), тож працює в обох темах.
-
 import {BASE_SYMBOLS} from "./base-symbols.jsx"
 
 const UNKNOWN_SYMBOL = {
@@ -15,7 +11,7 @@ export default function BaseSymbol({base, className}) {
 
     return (
         <svg
-            // key змінюється разом із символом — SVG перемонтовується і CSS-анімація появи грає знову
+            // key changes with the symbol so the SVG remounts and the appear animation replays
             key={symbolKey ?? "unknown"}
             className={className}
             viewBox="0 0 120 140"

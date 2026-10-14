@@ -1,5 +1,4 @@
-// Маленькі іконки для кнопок. Колір — currentColor, тож беруть колір тексту кнопки.
-// aria-hidden: підпис дає aria-label самої кнопки
+// Icons use currentColor and are aria-hidden: the button's aria-label is the accessible name
 
 export function PencilIcon() {
     return (
@@ -55,7 +54,6 @@ export function CloseIcon() {
     )
 }
 
-// Іконки хедера — трохи більші, під круглу кнопку з вузлом
 const SUN_RAYS = Array.from({length: 8}, (_, i) => {
     const angle = (i * Math.PI) / 4
     const [cos, sin] = [Math.cos(angle), Math.sin(angle)]
@@ -99,9 +97,8 @@ export function MoonIcon() {
 }
 
 /*
- *  Біфрьост — палаючий веселковий міст між Мідгардом і Асгардом. За «Молодшою Еддою» він має три кольори,
- *  тож три дуги: кольори теми (небезпека, золото, синій), щоб міст жив разом зі світлою й темною темою.
- *  Вийти з застосунку = піти мостом геть з Мідгарду.
+ *  Bifröst has three colours in the Prose Edda, hence three arcs in theme colours.
+ *  Logging out = leaving Midgard over the bridge.
  * */
 export function BifrostIcon() {
     return (

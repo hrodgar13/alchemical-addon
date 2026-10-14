@@ -1,6 +1,4 @@
-/* Рамка лежить під вмістом блоку на всю його площу.
-   Колір — той самий, що й у фонах основи та дистиляції (текст на 15%),
-   але через color-mix, а не opacity: так фон під написом лишається суцільним і закриває лозу */
+/* color-mix instead of opacity, so the label's background stays solid and hides the vine */
 .Frame {
     position: absolute;
     z-index: -1;
@@ -38,7 +36,6 @@
     scale: -1 -1;
 }
 
-/* Краї — між кутами; візерунок повторюється, тож лоза не розтягується */
 .EdgeHorizontal {
     position: absolute;
     left: 64px;
@@ -73,7 +70,7 @@
     scale: -1 1;
 }
 
-/* Напис на верхній лінії рамки: фон сторінки під ним «розриває» лозу */
+/* The page-coloured background behind the label breaks the vine */
 .Title {
     position: absolute;
     top: 6px;

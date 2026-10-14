@@ -3,8 +3,8 @@ import {Combobox} from "@base-ui/react/combobox"
 import styles from "./select.module.css"
 
 /*
- *  Пункт «+ Додати…» — справжній пункт списку: до нього можна дійти стрілками й вибрати Enter.
- *  Але це маркер, а не значення: при виборі викликаємо onCreate, а value селекта не змінюється.
+ *  "+ Add…" is a real, keyboard-reachable item but a sentinel: selecting it calls onCreate
+ *  and leaves the value unchanged.
  * */
 const CREATE_ITEM = {id: Symbol("create")}
 
@@ -18,18 +18,16 @@ export default function Select({
     objectSelect = null,
     createLabel = "",
     onCreate = null,
-    // Видимий підпис над селектом; Combobox.Label сам зв'язує його з тригером
     label = "",
-    // Для <form action>: значення потрапить у FormData під цим ім'ям як item.id
+    // For <form action>: submitted in FormData under this name as item.id
     name,
 }) {
-    const {contains} = Combobox.useFilter({sensitivity: "base"}) // 'base' = без урахування регістру
+    const {contains} = Combobox.useFilter({sensitivity: "base"}) // case-insensitive
     const [query, setQuery] = useState("")
     const trimmedQuery = query.trim()
-    // Запит, з яким натиснули «Додати»; null — створення не очікується. Ref, бо на рендер не впливає
+    // Search query at the moment "Add" was picked; null = no pending create
     const pendingCreateRef = useRef(null)
 
-    // Маркер «Додати» — завжди останній і завжди проходить фільтр пошуку
     const allItems = onCreate ? [...items, CREATE_ITEM] : items
 
     function filterItem(item, query) {
@@ -55,10 +53,8 @@ export default function Select({
     }
 
     /*
-     *  onCreate — лише коли список повністю закрився (анімація завершилась).
-     *  Якщо відкрити модалку раніше, вона блокує сторінку посеред закриття списку,
-     *  і селект «застрягає»: після закриття модалки він більше не відкривається.
-     *  Введене в пошук передаємо далі — форма створення підставить його як назву.
+     *  Call onCreate only after the list has fully closed: opening a dialog mid-close leaves the
+     *  combobox stuck so it never reopens. The query is passed on as the new item's name.
      * */
     function handleOpenChangeComplete(isOpen) {
         if (isOpen || pendingCreateRef.current === null) return
@@ -93,7 +89,7 @@ export default function Select({
             filter={searchable ? filterItem : null}
         >
             {label ? (
-                // Колонка «підпис + тригер» — лише з підписом, щоб не міняти layout селектів без нього
+                // Label + trigger column only when labelled, so unlabelled selects keep their layout
                 <div className={styles.Field}>
                     <Combobox.Label className={styles.Label}>{label}</Combobox.Label>
                     {trigger}

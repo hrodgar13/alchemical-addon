@@ -12,7 +12,7 @@ export default function WhereWeCook() {
     const isStation = whereWeCook === STATION
 
     function handleWhereWeCookChange(groupValue) {
-        // Повторний клік по вже вибраному пункту повертає [] — ігноруємо, один варіант завжди вибраний
+        // Clicking the selected option again yields []; ignore it so one option always stays selected
         const [newWhereWeCook] = groupValue
         if (newWhereWeCook) setWhereWeCook(newWhereWeCook)
     }
@@ -23,7 +23,7 @@ export default function WhereWeCook() {
 
     return (
         <div className={styles.WhereWeCook} data-station={isStation || undefined}>
-            {/* Небо: ніч з північним сяйвом (похідний набір) або тепле світло свічки (станція) */}
+            {/* Sky: night with aurora (field kit) or warm candlelight (lab station) */}
             <div className={styles.Sky} aria-hidden="true">
                 <div className={`${styles.SkyLayer} ${styles.Night}`} />
                 <div className={`${styles.SkyLayer} ${styles.Candle}`} />

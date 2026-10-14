@@ -1,4 +1,4 @@
-// Хрест поверх стрілки. Той самий viewBox, що й у ArrowDown, — тому накладаються один в один
+// Same viewBox as ArrowDown, so the two overlay exactly
 export default function Cross({color = "currentColor", className}) {
     return (
         <svg className={className} viewBox="0 0 100 120" fill="none" aria-hidden="true">

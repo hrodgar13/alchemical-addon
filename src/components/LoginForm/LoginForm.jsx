@@ -7,7 +7,7 @@ import Spinner from "../shared/spinner/Spinner.jsx"
 
 import styles from "./login-form.module.css"
 
-// Користувач сам закрив вікно Google або відкрив друге — це не помилка, нічого не показуємо
+// The user closed the Google popup or opened another one: not an error, show nothing
 const SILENT_ERROR_CODES = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"]
 
 const ERROR_MESSAGES = {
@@ -25,7 +25,7 @@ function toErrorMessage(err) {
 export default function LoginForm() {
     const {isAuthenticated, isAuthReady, login} = useAuth()
 
-    // Форма без полів: action лише відкриває вікно Google, а isPending вимикає кнопку, поки воно відкрите
+    // No fields: the action only opens the Google popup, and isPending disables the button while it is open
     const [error, formAction, isPending] = useActionState(async () => {
         try {
             await login()
@@ -35,10 +35,9 @@ export default function LoginForm() {
         }
     }, null)
 
-    // Поки невідомо, чи є збережена сесія, — не показуємо кнопку входу тому, хто вже увійшов
+    // Until the saved session is known, don't show the sign-in button to someone already signed in
     if (!isAuthReady) return <Spinner />
 
-    // Вже увійшли (або щойно увійшли) — одразу на головну, без useEffect
     if (isAuthenticated) return <Navigate to="/" replace />
 
     return (

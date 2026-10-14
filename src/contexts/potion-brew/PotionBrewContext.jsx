@@ -23,14 +23,14 @@ const ACTION_RESET = "reset"
 
 const initialState = {
     whereWeCook: FIELD_INSTRUMENTS,
-    // Лише id: саму основу беремо з каталогу під час рендеру, тож її редагування одразу видно в рецепті
+    // Ids only: the base is resolved from the catalog during render, so catalog edits show up in the recipe at once
     baseId: null,
-    // Слоти рецепту: {ingredientCombinationId, ingredientId, rarity, ground}. Як і з основою — лише id
+    // Recipe slots: {ingredientCombinationId, ingredientId, rarity, ground}; ids only, like the base
     ingredients: [],
     distill: false,
-    // Підтверджені, але ще не збережені на сервері зміни зілля (назва, опис, згар)
+    // Confirmed potion changes (name, description, scorched) not yet saved to the server
     potionDraft: null,
-    // Незавершене редагування назви й опису — до натискання «підтвердити»
+    // Name and description edit in progress, until confirmed
     potionEdit: null,
 }
 
@@ -50,7 +50,6 @@ function reducer(state, action) {
             return {...state, distill: action.payload}
         case ACTION_ADD_NEW_INGREDIENT:
             return {...state, ingredients: [...state.ingredients, action.payload]}
-        // Фігурні дужки дають case власну область видимості для const
         case ACTION_EDIT_EXISTING_INGREDIENT: {
             const updatedIngredientList = state.ingredients.map(ingredient => {
                 if (ingredient.ingredientCombinationId === action.payload.ingredientCombinationId) {
@@ -81,7 +80,7 @@ function reducer(state, action) {
         case ACTION_POTION_EDIT_CANCELLED:
             return {...state, potionEdit: null}
 
-        // Після варки — чиста форма, але місце варки лишається тим самим
+        // After brewing: a clean form, but the brewing place stays the same
         case ACTION_RESET:
             return {...initialState, whereWeCook: state.whereWeCook}
 
@@ -96,7 +95,7 @@ function PotionBrewProvider({children}) {
     const {bases, ingredients: catalogIngredients, brewedPotions, saveBrewedPotion} = usePotionComponents()
 
     const base = bases.find(base => base.id === baseId) ?? null
-    // Назовні слот віддаємо з повним інгредієнтом із каталогу — споживачі не знають про id
+    // Slots are exposed with the full catalog ingredient, so consumers never deal with ids
     const ingredients = state.ingredients.map(({ingredientId, ...slot}) => ({
         ...slot,
         ingredient: catalogIngredients.find(ingredient => ingredient.id === ingredientId) ?? null,
@@ -106,13 +105,12 @@ function PotionBrewProvider({children}) {
     const message = PotionValidation(difficulty, whereWeCook, base, ingredients)
     const ingredientEffects = calculateIngredientEffects({ingredients, distill})
 
-    // Зілля поточного рецепту — похідні значення, рахуються під час рендеру
     const recipeKey = getRecipeKey({base, ingredients})
     const brewedPotion = findBrewedPotion({recipeKey, brewedPotions})
     const alchemicalSentence = buildAlchemicalSentence({base, ingredientEffects})
 
-    // Чернетка й редагування прив'язані до ключа рецепту: змінився набір інгредієнтів —
-    // показуємо інше зілля без жодного useEffect. Повернувся назад — чернетка знову на місці
+    // Draft and edit are tied to the recipe key: a different ingredient set shows another potion,
+    // and switching back brings the draft back
     const potionDraft = state.potionDraft?.recipeKey === recipeKey ? state.potionDraft : null
     const potionEdit = state.potionEdit?.recipeKey === recipeKey ? state.potionEdit : null
     const potion = potionDraft ?? brewedPotion ?? EMPTY_POTION
@@ -139,10 +137,9 @@ function PotionBrewProvider({children}) {
     }
 
     function addNewIngredient() {
-        // Унікальний id, що не повторюється після видалень (на відміну від length + 1)
         const newIngredientCombinationId = crypto.randomUUID()
 
-        // 4-й інгредієнт можливий лише коли перетерті всі — тому він створюється одразу перетертим
+        // A 4th ingredient is allowed only when all are ground, so it starts ground
         const isExtraIngredient = ingredients.length === MAX_UNGRIND
 
         const newIngredient = {
@@ -155,7 +152,7 @@ function PotionBrewProvider({children}) {
         dispatch({type: ACTION_ADD_NEW_INGREDIENT, payload: newIngredient})
     }
 
-    // Приходить слот з об'єктом інгредієнта (як його віддали назовні) — у стан кладемо лише id
+    // Receives the slot with the ingredient object (as exposed); the state keeps only its id
     function editIngredientCombination({ingredient, ...slot}) {
         dispatch({type: ACTION_EDIT_EXISTING_INGREDIENT, payload: {...slot, ingredientId: ingredient?.id ?? null}})
     }
@@ -199,7 +196,7 @@ function PotionBrewProvider({children}) {
         dispatch({type: ACTION_POTION_DRAFT_CHANGED, payload: {...potion, recipeKey, isScorched: !potion.isScorched}})
     }
 
-    // На сервер зміни йдуть лише тут — нове зілля додається, відоме оновлюється
+    // The only place changes reach the server: a new potion is added, a known one is updated
     async function brewPotion() {
         if (!canBrew) return
 

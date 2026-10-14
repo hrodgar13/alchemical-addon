@@ -1,5 +1,5 @@
 .WhereWeCook {
-    /* position + isolation — щоб небо й стрічка лягали під вміст секції, але не під сторінку */
+    /* isolate: the z-index: -1 backdrop sits under the content but not under the page */
     position: relative;
     isolation: isolate;
     grid-column: 1/6;
@@ -12,7 +12,7 @@
     flex-direction: column;
     gap: 30px;
 
-    /* Кольори неба — світла тема: світанок і сонячне світло */
+    /* Light theme sky: dawn and sunlight */
     --night-base: rgb(150 180 230 / 0.35);
     --night-aurora-green: rgb(120 200 170 / 0.22);
     --night-aurora-violet: rgb(170 140 220 / 0.18);
@@ -21,7 +21,7 @@
     --candle-flame: rgb(255 160 80 / 0.2);
 }
 
-/* Кольори неба — темна тема: ніч з північним сяйвом і світло свічки */
+/* Dark theme sky: night with aurora and candlelight */
 :global(.dark) .WhereWeCook {
     --night-base: rgb(13 19 48 / 0.85);
     --night-aurora-green: rgb(80 200 150 / 0.35);
@@ -31,7 +31,7 @@
     --candle-flame: rgb(255 140 50 / 0.25);
 }
 
-/* Небо починається одразу під хедером і плавно розчиняється донизу у фон сторінки */
+/* The sky starts right under the header and fades into the page background */
 .Sky {
     position: absolute;
     z-index: -1;
@@ -49,7 +49,6 @@
         opacity 900ms ease-in-out;
 }
 
-/* Ніч: найнасиченіша зліва, ледве доходить праворуч */
 .Night {
     background:
         radial-gradient(ellipse 60% 90% at 15% 0%, var(--night-aurora-green), transparent 70%),
@@ -57,18 +56,17 @@
         linear-gradient(to right, var(--night-base) 0%, transparent 85%);
 }
 
-/* Свічка: навпаки — найтепліша справа */
 .Candle {
     background:
         radial-gradient(ellipse 55% 90% at 85% 0%, var(--candle-glow), transparent 70%),
         radial-gradient(ellipse 35% 60% at 68% 10%, var(--candle-flame), transparent 70%),
         linear-gradient(to left, var(--candle-base) 0%, transparent 85%);
-    /* За замовчуванням (похідний набір) свічка відсунута за правий край і прозора */
+    /* Default (field kit): the candle sits off the right edge, transparent */
     translate: 30% 0;
     opacity: 0;
 }
 
-/* Станція: ніч відступає вліво й згасає, свічка заходить справа */
+/* Lab station: the night recedes left and fades, the candle slides in from the right */
 [data-station] > .Sky > .Night {
     translate: -30% 0;
     opacity: 0;
@@ -79,7 +77,6 @@
     opacity: 1;
 }
 
-/* Нордична стрічка внизу секції на всю ширину */
 .Ribbon {
     position: absolute;
     z-index: -1;
@@ -91,7 +88,7 @@
     pointer-events: none;
 }
 
-/* Без анімацій — шари просто змінюють прозорість, без руху вбік */
+/* Reduced motion: layers only fade, without sliding */
 @media (prefers-reduced-motion: reduce) {
     .SkyLayer {
         transition: opacity 300ms;

@@ -10,20 +10,15 @@ import {
 } from "../static/static.js"
 
 /*
- *  Ефекти інгредієнтів зілля — конвеєр з чистих кроків:
- *  слоти → (1) внесок кожного слота → (2) групування за інгредієнтом → (3) модифікатори всього зілля
- *
- *  Результат — дані, а не рядки: шаблони опису братимуть звідси числа,
- *  а в текст для показу перетворює окрема formatIngredientEffect.
- *
- *  Час: ступка (і для 4-го інгредієнта теж) та крит множать кількість, дистиляція — стрибок на наступну одиницю.
- *  Крит. успіх не враховується — кидок робиться за столом, застосунок про нього не знає.
+ *  Pipeline: slots → (1) per-slot part → (2) group by ingredient → (3) whole-potion modifiers.
+ *  Time: grinding (4th ingredient too) multiplies the amount, distillation jumps to the next unit.
+ *  Critical success is ignored: it is rolled at the table and the app doesn't know about it.
  * */
 export function calculateIngredientEffects({ingredients, distill}) {
     const filledSlots = ingredients.filter(slot => slot.ingredient && slot.rarity)
 
     const parts = filledSlots.map(calculateSlotPart)
-    // Map, а не Object.groupBy: числові ключі об'єкта сортуються, а Map зберігає порядок слотів
+    // Map rather than Object.groupBy: numeric object keys get sorted, Map keeps the slot order
     const groups = Map.groupBy(parts, part => part.ingredient.id)
 
     return Array.from(groups.values(), groupParts => {
@@ -40,10 +35,10 @@ export function calculateIngredientEffects({ingredients, distill}) {
     })
 }
 
-// (1) Внесок одного слота, без модифікаторів усього зілля
+// (1) One slot's part, before whole-potion modifiers
 function calculateSlotPart({ingredient, rarity, ground}) {
     if (ingredient.effect_measures_in === MEASURE_DICE) {
-        // Ступка: кубик на градацію нижче, але подвоєний (к8 → 2к6) — і при 4 інгредієнтах теж
+        // Grinding: one die step lower but doubled (d8 → 2d6), with 4 ingredients too
         return {
             ingredient,
             die: ground ? rarity.ground_dice_of_effect : rarity.dice_of_effect,
@@ -54,7 +49,7 @@ function calculateSlotPart({ingredient, rarity, ground}) {
     return {ingredient, amount: rarity.time_units_amount * (ground ? GROUND_INGREDIENT_MULTIPLIER : 1)}
 }
 
-// (2) + (3) Кубики: рахуємо кількість окремо для кожного кубика — {к10: 4, к12: 1}
+// (2) + (3) Dice: count each die size separately, e.g. {d10: 4, d12: 1}
 function mergeDice({ingredient, groupParts, distill}) {
     const multiplier = distill ? DISTILLED_MULTIPLIER : 1
 
@@ -63,7 +58,6 @@ function mergeDice({ingredient, groupParts, distill}) {
         return acc
     }, {})
 
-    // Від більшого кубика до меншого: 1к12 + 4к10
     const dice = Object.entries(countsByDie)
         .map(([die, count]) => ({die, count}))
         .sort((a, b) => dieSize(b.die) - dieSize(a.die))
@@ -71,30 +65,29 @@ function mergeDice({ingredient, groupParts, distill}) {
     return {ingredient, measure: MEASURE_DICE, dice}
 }
 
-// (2) + (3) Час: в одного інгредієнта одна одиниця, тож просто сумуємо; дистиляція — стрибок одиниці
+// (2) + (3) Time: an ingredient has a single unit, so amounts just add up; distillation jumps the unit
 function mergeTime({ingredient, groupParts, distill}) {
     const amount = groupParts.reduce((acc, {amount}) => acc + amount, 0)
     const unit = distill ? nextTimeUnit(ingredient.time_units) : ingredient.time_units
 
-    // Перманентний ефект — кількість більше не має значення
+    // A permanent effect has no amount
     return {ingredient, measure: MEASURE_TIME, unit, amount: unit === TIME_UNIT_PERMANENT ? null : amount}
 }
 
-// Стрибок на наступну одиницю; вище року — перманентно (останній елемент)
+// Above a year it becomes permanent (the last element)
 function nextTimeUnit(unit) {
     const nextIndex = Math.min(TIME_UNITS_ORDER.indexOf(unit) + 1, TIME_UNITS_ORDER.length - 1)
 
     return TIME_UNITS_ORDER[nextIndex]
 }
 
-// 'к10' → 10
 function dieSize(die) {
     return Number(die.slice(1))
 }
 
 const pluralRules = new Intl.PluralRules("uk")
 
-// (4) Текст для показу: «1к12 + 4к10», «32 хвилини», «назавжди»
+// (4) Display text: "1d12 + 4d10", "32 minutes", "forever"
 export function formatIngredientEffect(effect) {
     if (effect.measure === MEASURE_DICE) {
         return effect.dice.map(({die, count}) => `${count}${die}`).join(" + ")

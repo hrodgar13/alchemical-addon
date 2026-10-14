@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local notes for Claude and the alchemy rules document — kept out of the repo
+CLAUDE.md
+docs/

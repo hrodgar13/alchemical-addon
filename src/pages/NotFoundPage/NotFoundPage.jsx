@@ -2,14 +2,13 @@ import {Link} from "react-router"
 
 import styles from "./not-found-page.module.css"
 
-// Англійська фраза, записана старшим футарком (як напис навколо трикветри)
+// English phrases written in Elder Futhark
 const TITLE_RUNES = "ᛚᛟᛟᚲᛊ᛫ᛚᛁᚲᛖ᛫ᛟᚾᛚᛁ᛫ᚷᛁᚾᚾᚢᛜᚨᚷᚨᛈ᛫ᛁᛊ᛫ᚦᛖᚱᛖ"
 const BACK_RUNES = "ᛒᚨᚲ᛫ᛏᛟ᛫ᛗᛁᛞᚷᚨᚱᛞ"
 
 /*
- *  Руни — aria-hidden: скрінрідер прочитав би їх як набір незрозумілих символів.
- *  Доступна назва заголовка й посилання — переклад під рунами.
- *  На «/» веде <Link>, а не кнопка з navigate: це перехід, а не дія — так працює і «відкрити в новій вкладці».
+ *  Runes are aria-hidden (a screen reader would read gibberish); the translation is the accessible name.
+ *  A <Link>, not a navigate button: it's navigation, so "open in new tab" works.
  * */
 export default function NotFoundPage() {
     return (

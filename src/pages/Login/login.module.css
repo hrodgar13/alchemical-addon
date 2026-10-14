@@ -1,4 +1,3 @@
-/* Сторінка займає все місце під хедером (.app — flex-колонка), форма — точно по центру */
 .LoginPage {
     position: relative;
     isolation: isolate;
@@ -10,10 +9,8 @@
 }
 
 /*
- *  Іґґдрасіль на фоні — на всю висоту сторінки.
- *  SVG використовується як маска (luminance: біле — видно, чорне — ні), а колір дає background-color,
- *  тож дерево перефарбовується разом з темою без жодного JS і без копій SVG під кожну тему.
- *  Колір змішаний з фоном, а не прозорий — дерево приглушене і не сперечається з формою.
+ *  Yggdrasil SVG as a luminance mask coloured by background-color, so it follows the theme
+ *  without JS or per-theme SVGs. Mixed with the background to stay muted behind the form.
  * */
 .LoginPage::before {
     content: "";

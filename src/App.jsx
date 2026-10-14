@@ -9,7 +9,7 @@ import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.jsx"
 const AlchemicalTable = lazy(() => import("./pages/AlchemicalTable.jsx"))
 const Login = lazy(() => import("./pages/Login/Login.jsx"))
 
-// Роутер — найзовнішній: тоді і хедер може використовувати <Link> та useNavigate
+// Router is outermost so the header can use <Link> and useNavigate
 function App() {
     return (
         <BrowserRouter>

@@ -34,7 +34,6 @@
         outline-offset: 2px;
     }
 
-    /* Кнопка-перемикач (напр. «Згар») у ввімкненому стані */
     &[aria-pressed="true"] {
         background-color: var(--color-header-text);
         color: var(--color-header-bg);

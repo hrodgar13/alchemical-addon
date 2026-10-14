@@ -1,9 +1,9 @@
 .AlchemicalResult {
-    /* position + isolation — щоб різьблена рамка лягала під вміст блоку, але не під сторінку */
+    /* isolate: the z-index: -1 backdrop sits under the content but not under the page */
     position: relative;
     isolation: isolate;
     grid-column: 1/5;
-    /* Відступ від рамки, щоб вміст не налазив на вузли в кутах */
+    /* Keep content clear of the frame's corner knots */
     padding: 28px;
     display: flex;
     gap: 16px;
@@ -14,7 +14,6 @@
     list-style: none;
 }
 
-/* Колір як у рамки — розділювач з тієї ж «різьби» */
 .Divider {
     flex-shrink: 0;
     align-self: stretch;
@@ -28,7 +27,6 @@
     padding: 5px;
 }
 
-/* Назва та опис зілля */
 .Description {
     flex: 1;
     min-width: 0;
@@ -57,7 +55,6 @@
     overflow-wrap: anywhere;
 }
 
-/* Поле назви — спільний Input, тут лише його місце в рядку */
 .NameField {
     flex: 1;
 }
@@ -81,7 +78,6 @@
     white-space: pre-line;
 }
 
-/* Підставлені з рецепту кубики й тривалість */
 .Value {
     font-weight: 700;
     color: var(--color-outline);
@@ -92,8 +88,6 @@
     font-size: 14px;
 }
 
-/* Попередження про невідомі теги: текст основним кольором (читабельний),
-   а самі теги — акцентним золотим, щоб їх було легко знайти в описі */
 .Warning {
     font-size: 14px;
 

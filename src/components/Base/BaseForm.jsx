@@ -13,18 +13,17 @@ const SYMBOL_OPTIONS = [NO_SYMBOL, ...BASE_SYMBOL_OPTIONS]
 const normalize = text => text.trim().toLowerCase()
 
 /*
- *  Форма створення й редагування основи: без existingBase — нова, з ним — редагування.
- *  Стан дії — це значення полів, а не сама основа: після сабміту React 19 скидає форму,
- *  і defaultValue з цього стану повертає введене (напр. при помилці валідації).
+ *  Action state holds field values, not the base: React 19 resets the form after submit,
+ *  and defaultValue from this state restores the input (e.g. after a validation error).
  * */
 export default function BaseForm({prefilledName = "", existingBase = null, onSaved}) {
     const {bases, addOrEditBase} = usePotionComponents()
-    // Символ — керований селект: Combobox сам кладе значення в FormData через name
+    // Combobox submits its value into FormData via `name`
     const [symbolOption, setSymbolOption] = useState(
         () => SYMBOL_OPTIONS.find(option => option.id === existingBase?.symbol) ?? NO_SYMBOL,
     )
 
-    // Дублікати шукаємо серед інших основ — редагована не конфліктує сама з собою
+    // Check duplicates only among other bases, so the edited one doesn't clash with itself
     const otherBases = bases.filter(base => base.id !== existingBase?.id)
 
     async function saveBaseAction(previousState, formData) {
@@ -52,7 +51,7 @@ export default function BaseForm({prefilledName = "", existingBase = null, onSav
         }
 
         try {
-            // existingBase дає id і поля, яких форма не знає, — вони не загубляться при редагуванні
+            // Spreading existingBase keeps its id and any fields the form doesn't know about
             const savedBase = await addOrEditBase({...existingBase, name, alchemicalWord, difficulty, symbol})
             onSaved(savedBase)
             return {values, error: null}

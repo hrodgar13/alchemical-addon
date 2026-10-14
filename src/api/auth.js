@@ -1,7 +1,7 @@
 import {GoogleAuthProvider, onAuthStateChanged, signInWithPopup, signOut} from "firebase/auth"
 import {auth} from "./firebase.js"
 
-// Вікно вибору акаунта Google. Якщо користувач закриє його — проміс відхилиться з помилкою
+// Rejects if the user closes the Google account popup
 export function signInWithGoogle() {
     return signInWithPopup(auth, new GoogleAuthProvider())
 }
@@ -11,9 +11,8 @@ export function logOut() {
 }
 
 /*
- *  callback(user | null) — щоразу, коли змінюється стан входу: вхід, вихід,
- *  а також одразу після завантаження сторінки, коли Firebase відновив (або ні) збережену сесію.
- *  Повертає функцію відписки — для cleanup у useEffect.
+ *  callback(user | null) fires on sign-in, sign-out and once on page load, after Firebase
+ *  has restored (or failed to restore) the saved session. Returns the unsubscribe function.
  * */
 export function subscribeToAuthChanges(callback) {
     return onAuthStateChanged(auth, callback)

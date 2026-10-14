@@ -6,21 +6,10 @@ import {CloseIcon} from "../icons/Icons.jsx"
 import styles from "./modal.module.css"
 
 /*
- *  Модальне вікно: обгортка над Base UI Dialog з нашим оформленням (різьблена рамка, хрестик).
- *  Base UI бере на себе доступність: фокус не виходить з вікна, Esc і клік по фону закривають,
- *  після закриття фокус повертається туди, звідки вікно відкрили.
- *
- *  Керована ззовні: батько тримає `open` і отримує `onOpenChange(false)` на хрестик / Esc / фон.
- *  Так форма всередині сама вирішує, коли закрити вікно — напр. лише після успішного збереження.
- *
- *  title — обов'язковий: Dialog.Title стає доступною назвою вікна для скрінрідера.
- *  Вміст (форма, кнопки дій) — через children.
- *
- *  onOpenChangeComplete(open) — після завершення анімації відкриття/закриття. Скидай тут дані,
- *  які показує вікно: якщо скинути їх одразу в onOpenChange, вміст зміниться посеред зникнення.
- *
- *  initialFocus — ref елемента, який отримає фокус при відкритті (напр. перше поле форми).
- *  Без нього фокус стає на перший інтерактивний елемент — це хрестик.
+ *  Controlled: the parent owns `open`, so a form inside decides when to close (e.g. only after a successful save).
+ *  title is required: Dialog.Title is the dialog's accessible name.
+ *  Reset displayed data in onOpenChangeComplete, not onOpenChange, or it changes mid close animation.
+ *  initialFocus: without it focus lands on the close button.
  * */
 export default function Modal({open, onOpenChange, onOpenChangeComplete, title, description, initialFocus, children}) {
     return (
@@ -33,7 +22,7 @@ export default function Modal({open, onOpenChange, onOpenChangeComplete, title, 
 
                         <div className={styles.Header}>
                             <Dialog.Title className={styles.Title}>{title}</Dialog.Title>
-                            {/* render — Dialog.Close віддає свою поведінку нашій кнопці, а не малює власну */}
+                            {/* render: Dialog.Close lends its behaviour to our Button instead of rendering its own */}
                             <Dialog.Close render={<Button aria-label="Закрити" />}>
                                 <CloseIcon />
                             </Dialog.Close>
