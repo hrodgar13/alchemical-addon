@@ -1,13 +1,10 @@
 import {useEffect, useReducer} from "react"
-import {
-    BASES,
-    BREWED_POTIONS,
-    FIELD_INSTRUMENTS,
-    INGREDIENT_RARITIES,
-    MOCK_INGREDIENTS,
-    STATION,
-} from "../../static/static.js"
+import {FIELD_INSTRUMENTS, INGREDIENT_RARITIES, STATION} from "../../static/static.js"
 import {PotionComponentsContext} from "./potion-components-context.js"
+import {useAuth} from "../../hooks/useAuth.js"
+import {getBases, saveBase} from "../../api/bases.js"
+import {getIngredients, saveIngredient} from "../../api/ingredients.js"
+import {getBrewedPotions, saveBrewedPotion as saveBrewedPotionToDb} from "../../api/brewed-potions.js"
 
 const ACTION_LOADING = "loading"
 const BASE_LOADED = "base/loaded"
@@ -25,7 +22,8 @@ const initialState = {
     ingredients: [],
     ingredientRarities: INGREDIENT_RARITIES,
     brewedPotions: [],
-    isLoading: false,
+    // true з самого початку — щоб до першої відповіді Firestore не мигнув порожній каталог
+    isLoading: true,
     errors: [],
 }
 
@@ -65,72 +63,65 @@ function reducer(state, action) {
 function PotionComponentProvider({children}) {
     const [{cookPlaces, bases, ingredients, ingredientRarities, brewedPotions, isLoading, errors}, dispatch] =
         useReducer(reducer, initialState)
+    // Провайдер живе на захищених сторінках, але в мить виходу user вже null — тоді нічого не вантажимо
+    const uid = useAuth().user?.uid
 
     useEffect(() => {
-        dispatch({type: ACTION_LOADING})
+        if (!uid) return
 
-        async function fetchBases() {
-            try {
-                //TODO there will be fetch from API's
-                const data = BASES
-                dispatch({type: BASE_LOADED, payload: data})
-            } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Bases: ${err.message}`})
-            }
+        // Якщо uid зміниться (вихід і вхід іншим акаунтом), відповіді старого запиту вже не потрібні
+        let isCancelled = false
+
+        function dispatchIfActive(action) {
+            if (!isCancelled) dispatch(action)
         }
 
-        async function fetchIngredients() {
+        async function fetchCollection(fetcher, loadedType, label) {
             try {
-                //TODO there will be fetch from API's
-                const data = MOCK_INGREDIENTS
-                dispatch({type: INGREDIENTS_LOADED, payload: data})
+                dispatchIfActive({type: loadedType, payload: await fetcher(uid)})
             } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Ingredients: ${err.message}`})
-            }
-        }
-
-        async function fetchBrewedPotions() {
-            try {
-                //TODO there will be fetch from API's
-                const data = BREWED_POTIONS
-                dispatch({type: BREWED_POTIONS_LOADED, payload: data})
-            } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Brewed potions: ${err.message}`})
+                dispatchIfActive({type: ERROR, payload: `An Error occurred while fetching ${label}: ${err.message}`})
             }
         }
 
         async function fetchAll() {
-            await Promise.all([fetchBases(), fetchIngredients(), fetchBrewedPotions()])
-            dispatch({type: FINISHED})
+            dispatch({type: ACTION_LOADING})
+            await Promise.all([
+                fetchCollection(getBases, BASE_LOADED, "Bases"),
+                fetchCollection(getIngredients, INGREDIENTS_LOADED, "Ingredients"),
+                fetchCollection(getBrewedPotions, BREWED_POTIONS_LOADED, "Brewed potions"),
+            ])
+            dispatchIfActive({type: FINISHED})
         }
 
         fetchAll()
-    }, [])
 
-    async function saveBrewedPotion(potion) {
-        try {
-            //TODO there will be save to API (insert або update за id)
-            const savedPotion = {...potion, id: potion.id ?? crypto.randomUUID()}
-            dispatch({type: BREWED_POTION_SAVED, payload: savedPotion})
-        } catch (err) {
-            dispatch({type: ERROR, payload: `An Error occurred while saving Brewed potion: ${err.message}`})
+        return () => {
+            isCancelled = true
         }
+    }, [uid])
+
+    /*
+     *  Збереження: спершу чекаємо Firestore, потім оновлюємо стан — у списку лише те, що справді збереглось.
+     *  Помилку не ловимо: її показує той, хто викликав (форма; для зілля — варка не скидає рецепт).
+     *  Повертаємо збережений запис — з id від Firestore, якщо він новий.
+     * */
+    async function saveBrewedPotion(potion) {
+        const savedPotion = await saveBrewedPotionToDb(uid, potion)
+        dispatch({type: BREWED_POTION_SAVED, payload: savedPotion})
+
+        return savedPotion
     }
 
-    // Помилку не ловимо: її показує форма, яка викликала збереження.
-    // Повертаємо збережену основу — з id, якщо вона нова
     async function addOrEditBase(base) {
-        //TODO there will be save to API
-        const savedBase = {...base, id: base.id ?? crypto.randomUUID()}
+        const savedBase = await saveBase(uid, base)
         dispatch({type: BASE_SAVED, payload: savedBase})
 
         return savedBase
     }
 
-    // Як addOrEditBase: помилку показує форма, повертаємо збережений інгредієнт
     async function addOrEditIngredient(ingredient) {
-        //TODO there will be save to API
-        const savedIngredient = {...ingredient, id: ingredient.id ?? crypto.randomUUID()}
+        const savedIngredient = await saveIngredient(uid, ingredient)
         dispatch({type: INGREDIENT_SAVED, payload: savedIngredient})
 
         return savedIngredient

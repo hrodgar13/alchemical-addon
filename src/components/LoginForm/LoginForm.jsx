@@ -2,34 +2,41 @@ import {useActionState} from "react"
 import {Navigate} from "react-router"
 import {useAuth} from "../../hooks/useAuth.js"
 import Button from "../shared/button/Button.jsx"
-import Input from "../shared/input/Input.jsx"
 import CarvedFrame from "../shared/carved-frame/CarvedFrame.jsx"
+import Spinner from "../shared/spinner/Spinner.jsx"
 
 import styles from "./login-form.module.css"
 
-/*
- *  React 19 після завершення action скидає неконтрольовану форму до defaultValue.
- *  Тому введений логін повертаємо в стані action і підставляємо назад — при помилці він не зникне.
- *  Пароль навмисно не повертаємо.
- * */
-const initialState = {error: null, login: "Hrodgar13"}
+// Користувач сам закрив вікно Google або відкрив друге — це не помилка, нічого не показуємо
+const SILENT_ERROR_CODES = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"]
+
+const ERROR_MESSAGES = {
+    "auth/popup-blocked": "Браузер заблокував вікно входу. Дозвольте спливні вікна для цього сайту.",
+    "auth/unauthorized-domain": "Вхід з цієї адреси не дозволено в налаштуваннях Firebase.",
+    "auth/network-request-failed": "Немає з'єднання з мережею. Спробуйте ще раз.",
+}
+
+function toErrorMessage(err) {
+    if (SILENT_ERROR_CODES.includes(err.code)) return null
+
+    return ERROR_MESSAGES[err.code] ?? "Не вдалося увійти. Спробуйте ще раз."
+}
 
 export default function LoginForm() {
-    const {isAuthenticated, login} = useAuth()
+    const {isAuthenticated, isAuthReady, login} = useAuth()
 
-    const [{error, login: enteredLogin}, formAction, isPending] = useActionState(async (previousState, formData) => {
-        const loginField = formData.get("login")
-        const password = formData.get("password")
-
-        if (!loginField || !password) return {error: "Login and password are required", login: loginField}
-
+    // Форма без полів: action лише відкриває вікно Google, а isPending вимикає кнопку, поки воно відкрите
+    const [error, formAction, isPending] = useActionState(async () => {
         try {
-            await login(loginField, password)
-            return {error: null, login: loginField}
+            await login()
+            return null
         } catch (err) {
-            return {error: err.message || "Invalid credentials", login: loginField}
+            return toErrorMessage(err)
         }
-    }, initialState)
+    }, null)
+
+    // Поки невідомо, чи є збережена сесія, — не показуємо кнопку входу тому, хто вже увійшов
+    if (!isAuthReady) return <Spinner />
 
     // Вже увійшли (або щойно увійшли) — одразу на головну, без useEffect
     if (isAuthenticated) return <Navigate to="/" replace />
@@ -39,22 +46,14 @@ export default function LoginForm() {
             <CarvedFrame />
 
             <h2 className={styles.Title}>Вхід до майстерні</h2>
-
-            <Input label="Login" name="login" defaultValue={enteredLogin} autoComplete="username" />
-            <Input
-                label="Password"
-                type="password"
-                name="password"
-                defaultValue="qwerty123!"
-                autoComplete="current-password"
-            />
+            <p className={styles.Hint}>Перший вхід створить вашу майстерню — окремо для кожного акаунта Google.</p>
 
             <p className={styles.Error} role="alert">
                 {error}
             </p>
 
             <Button type="submit" disabled={isPending}>
-                {isPending ? "Logging in..." : "Login"}
+                {isPending ? "Чекаємо на Google..." : "Увійти через Google"}
             </Button>
         </form>
     )

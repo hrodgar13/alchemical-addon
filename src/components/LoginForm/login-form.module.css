@@ -20,6 +20,13 @@
     color: var(--color-header-text);
 }
 
+.Hint {
+    margin-top: -8px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 14px;
+}
+
 .Error {
     color: var(--color-danger);
     font-size: 14px;
