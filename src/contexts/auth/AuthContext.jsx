@@ -1,48 +1,61 @@
-import {useReducer} from "react"
+import {useEffect, useReducer} from "react"
 import {AuthContext} from "./auth-context.js"
+import {logOut, signInWithGoogle, subscribeToAuthChanges} from "../../api/auth.js"
 
 const initState = {
     user: null,
-    isAuthenticated: false,
+    // false until Firebase reports whether a saved session exists; access can't be decided before that
+    isAuthReady: false,
 }
 
-const ACTION_LOGIN = "login"
-const ACTION_LOGOUT = "logout"
-
-const MOCK_USER = {
-    login: "Hrodgar13",
-    password: "qwerty123!",
-}
+const ACTION_AUTH_CHANGED = "auth/changed"
 
 function reducer(state, action) {
     switch (action.type) {
-        case ACTION_LOGIN:
-            return {...state, user: action.payload, isAuthenticated: true}
-        case ACTION_LOGOUT:
-            return {...state, user: null, isAuthenticated: false}
+        case ACTION_AUTH_CHANGED:
+            return {...state, user: action.payload, isAuthReady: true}
         default:
             throw new Error("Unknown action type in Auth Provider reducer")
     }
 }
 
+// Keep only the plain fields the app needs, not the whole Firebase user object
+function toAppUser(firebaseUser) {
+    if (!firebaseUser) return null
+
+    const {uid, displayName, email, photoURL} = firebaseUser
+
+    return {uid, name: displayName, email, photoURL}
+}
+
 function AuthProvider({children}) {
-    const [{user, isAuthenticated}, dispatch] = useReducer(reducer, initState)
+    const [{user, isAuthReady}, dispatch] = useReducer(reducer, initState)
+    const isAuthenticated = user !== null
 
-    // TODO: замінити на Firebase Auth. Помилка кидається, щоб форма могла її показати
-    async function login(login, password) {
-        if (login !== MOCK_USER.login || password !== MOCK_USER.password) {
-            throw new Error("Invalid login or password")
-        }
+    /*
+     *  The only place auth state changes: login and logout just ask Firebase, which reports
+     *  the result here, so the state never drifts from the real session.
+     * */
+    useEffect(() => {
+        return subscribeToAuthChanges(firebaseUser => {
+            dispatch({type: ACTION_AUTH_CHANGED, payload: toAppUser(firebaseUser)})
+        })
+    }, [])
 
-        // У стан — лише дані користувача, без пароля
-        dispatch({type: ACTION_LOGIN, payload: {login}})
+    // Errors (e.g. a closed Google popup) aren't caught here: the login form shows them
+    async function login() {
+        await signInWithGoogle()
     }
 
-    function logout() {
-        dispatch({type: ACTION_LOGOUT})
+    async function logout() {
+        await logOut()
     }
 
-    return <AuthContext.Provider value={{user, isAuthenticated, logout, login}}>{children}</AuthContext.Provider>
+    return (
+        <AuthContext.Provider value={{user, isAuthenticated, isAuthReady, login, logout}}>
+            {children}
+        </AuthContext.Provider>
+    )
 }
 
 export {AuthProvider}

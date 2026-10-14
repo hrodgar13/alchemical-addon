@@ -1,15 +1,14 @@
 /*
- *  Зілля визначається основою + набором унікальних інгредієнтів (без порядку й кількості).
- *  Тому ключ рецепту — id основи і відсортовані унікальні id інгредієнтів:
- *  «Підсніжник + 2 кігті» і «2 підсніжники + кіготь» дають однаковий ключ.
+ *  A potion is a base plus a set of unique ingredients (order and count don't matter),
+ *  so "Snowdrop + 2 Claws" and "2 Snowdrops + Claw" get the same key.
  * */
-export function buildRecipeKey({baseId, ingredientsIds}) {
+function buildRecipeKey({baseId, ingredientsIds}) {
     const uniqueIds = [...new Set(ingredientsIds.map(String))].sort()
 
     return `${baseId}:${uniqueIds.join(",")}`
 }
 
-// Ключ поточного рецепту; null — поки рецепт неповний (немає основи або є порожній слот)
+// null while the recipe is incomplete (no base or an empty slot)
 export function getRecipeKey({base, ingredients}) {
     const isComplete = base && ingredients.length > 0 && ingredients.every(slot => slot.ingredient)
 
@@ -24,7 +23,7 @@ export function findBrewedPotion({recipeKey, brewedPotions}) {
     return brewedPotions.find(potion => buildRecipeKey(potion) === recipeKey) ?? null
 }
 
-// «Дати Сила Холод» — слово основи і слова унікальних інгредієнтів
+// The base word followed by the unique ingredient words, e.g. "Give Strength Cold"
 export function buildAlchemicalSentence({base, ingredientEffects}) {
     if (!base) return ""
 

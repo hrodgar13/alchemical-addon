@@ -2,27 +2,23 @@ import {useId} from "react"
 import styles from "./carved-frame.module.css"
 
 /*
- *  Різьблена рамка блоку зілля: дві паралельні лінії з косими розрізами,
- *  у кутах лінії разом утворюють стрічку, що зав'язується в петлю «над-під».
- *  Напис ᚨᛚᚢ (alu) — рунічне «магічне» слово з амулетів; одне з тлумачень — ель, ритуальний напій.
- *
- *  Розрізи — не пробіли, а скошені кінці відрізків (паралелограми), тож вони прозорі на будь-якому фоні.
- *  Плитка візерунка довга, а розрізи на «непарних» позиціях — щоб око не помічало повтору.
- *  Колір — з CSS-властивості `color` (currentColor).
+ *  Two parallel lines with slanted cuts that braid into an over-under loop at the corners; ᚨᛚᚢ (alu) is a runic charm word.
+ *  Cuts are slanted segment ends (parallelograms), so they stay transparent on any background;
+ *  they sit at uneven offsets in a long tile so the repeat isn't noticeable.
  * */
 
-// Лінії стрічки: зовнішня й внутрішня, обидві по 1.5px. Кут і краї використовують ті самі відступи
+// Outer and inner ribbon lines, 1.5px each; corners and edges share these offsets
 const OUTER_LINE = {from: 0.25, to: 1.75}
 const INNER_LINE = {from: 4.75, to: 6.25}
 const BAND = 6.5
 
 const TILE = 190
-const SLANT = 3 // наскільки скошений розріз
-const GAP = 3 // ширина розрізу
+const SLANT = 3 // horizontal skew of a cut
+const GAP = 3 // cut width
 const OUTER_CUTS = [37, 131]
 const INNER_CUTS = [84, 168]
 
-// Відрізки лінії між розрізами; крайні виходять за плитку, щоб сусідні плитки зливалися в одну лінію
+// Segments between cuts; the outermost overflow the tile so adjacent tiles join into one line
 function cutSegments(cuts, {from, to}) {
     const edges = [-SLANT - 1, ...cuts.flatMap(cut => [cut, cut + GAP]), TILE + 1]
     const segments = []
@@ -39,7 +35,6 @@ const OUTER_SEGMENTS = cutSegments(OUTER_CUTS, OUTER_LINE)
 const INNER_SEGMENTS = cutSegments(INNER_CUTS, INNER_LINE)
 
 export default function CarvedFrame() {
-    // Унікальні id для <pattern> — щоб не конфліктували, якщо рамка буде на сторінці не одна
     const id = useId()
     const horizontalPatternId = `${id}-carved-h`
     const verticalPatternId = `${id}-carved-v`
@@ -56,7 +51,7 @@ export default function CarvedFrame() {
                     <pattern id={horizontalPatternId} width={TILE} height={BAND} patternUnits="userSpaceOnUse">
                         <CarvedLines />
                     </pattern>
-                    {/* Той самий візерунок, але x і y поміняні місцями — вертикальна сторона */}
+                    {/* Same pattern with x and y swapped for the vertical sides */}
                     <pattern
                         id={verticalPatternId}
                         width={TILE}
@@ -84,7 +79,6 @@ export default function CarvedFrame() {
     )
 }
 
-// Вертикальний розділювач усередині блоку: одна лінія з розрізами, як у рамки
 const DIVIDER_SEGMENTS = cutSegments([61, 149], {from: 3.25, to: 4.75})
 
 export function CarvedDivider({className}) {
@@ -124,19 +118,18 @@ function CarvedLines() {
 }
 
 /*
- *  Лівий верхній кут; інші — його дзеркальні відображення через CSS.
- *  Стрічка (обидві лінії разом) приходить згори, закручується в петлю і йде вниз,
- *  проходячи над собою. Стрічка = широка лінія кольору + вужча лінія кольору фону посередині.
+ *  Top-left corner; the others mirror it via CSS. The ribbon loops and passes over itself.
+ *  Ribbon = a wide stroke with a narrower background-coloured stroke down the middle.
  * */
 const CORNER = 32
 const RIBBON_CENTER = (OUTER_LINE.from + INNER_LINE.to) / 2
 const RIBBON_WIDTH = INNER_LINE.to - OUTER_LINE.from
 const RIBBON_GAP = INNER_LINE.from - OUTER_LINE.to
-// Петля симетрична відносно діагоналі кута: перша половина — до найдальшої точки петлі, друга — назад
+// The loop is symmetric about the corner diagonal: LOOP_IN runs to its far point, LOOP_OUT back
 const C = RIBBON_CENTER
 const LOOP_IN = `M ${CORNER} ${C} H 26 Q 13 ${C} 13 19 Q 13 27 20 27 Q 27 27 27 20`
 const LOOP_OUT = `M 27 20 Q 27 13 19 13 Q ${C} 13 ${C} 26 V ${CORNER}`
-// Точка, де стрічка перетинає сама себе
+// Where the ribbon crosses itself
 const CROSSING = {x: 13.5, y: 13.5, r: 7}
 
 function KnotCorner({className}) {
@@ -153,7 +146,7 @@ function KnotCorner({className}) {
             <Ribbon d={LOOP_IN} />
             <Ribbon d={LOOP_OUT} />
 
-            {/* На перетині друга половина стрічки проходить зверху: малюємо її ще раз з «ореолом» фону */}
+            {/* The second half passes over at the crossing: redraw it with a background-coloured halo */}
             <g clipPath={`url(#${clipId})`}>
                 <path d={LOOP_OUT} stroke="var(--color-bg)" strokeWidth={RIBBON_WIDTH + 3} />
                 <Ribbon d={LOOP_OUT} />

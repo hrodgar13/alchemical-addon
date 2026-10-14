@@ -14,7 +14,7 @@ export default function Base() {
     const {bases} = usePotionComponents()
     const {base, setBase} = usePotionBrew()
     const [isModalOpen, setIsModalOpen] = useState(false)
-    // Що показує вікно: null — створення нової основи, об'єкт — редагування цієї
+    // null = create a new base, object = edit that base
     const [editableBase, setEditableBase] = useState(null)
     const [prefilledName, setPrefilledName] = useState("")
 
@@ -29,7 +29,7 @@ export default function Base() {
         setIsModalOpen(true)
     }
 
-    // Скидаємо, коли вікно вже зникло: інакше заголовок і кнопка змінились би посеред анімації
+    // Reset only after the close animation, otherwise the title and button would change mid-animation
     function handleModalOpenChangeComplete(isOpen) {
         if (isOpen) return
 
@@ -37,8 +37,7 @@ export default function Base() {
         setPrefilledName("")
     }
 
-    // Нову основу одразу обираємо — її ж для цього й створювали.
-    // Відредаговану обирати не треба: рецепт тримає лише id і сам бачить нові дані
+    // Select a newly created base; an edited one needn't be: the recipe holds only the id and sees the new data
     function handleSaved(savedBase) {
         if (!editableBase) setBase(savedBase)
 
@@ -72,7 +71,7 @@ export default function Base() {
                 title={editableBase ? "Редагувати Основу" : "Нова Основа"}
                 description="Основа задає дію зіллю"
             >
-                {/* key — інша основа означає нову форму: useActionState бере початковий стан лише при монтуванні */}
+                {/* useActionState reads its initial state only on mount, so a different base needs a fresh form */}
                 <BaseForm
                     key={editableBase?.id ?? "new"}
                     prefilledName={prefilledName}

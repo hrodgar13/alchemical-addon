@@ -1,5 +1,4 @@
 import {createContext} from "react"
 
-// Сам об'єкт контексту — окремо від провайдера (компонента) і хука,
-// щоб файл з провайдером експортував лише компонент і Fast Refresh працював без перезавантаження сторінки
+// Kept apart from the provider so the provider file exports only components and Fast Refresh works
 export const PotionComponentsContext = createContext()

@@ -1,5 +1,5 @@
 .Distill {
-    /* position + isolation — щоб реторта на фоні лягала під вміст секції, але не під сторінку */
+    /* isolate: the z-index: -1 backdrop sits under the content but not under the page */
     position: relative;
     isolation: isolate;
     justify-content: center;
@@ -12,7 +12,6 @@
     gap: 30px;
 }
 
-/* Реторта — по центру секції, на фоні */
 .Symbol {
     position: absolute;
     z-index: -1;

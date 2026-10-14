@@ -1,10 +1,8 @@
 import {useId} from "react"
 import styles from "./knot-ribbon.module.css"
 
-// Нордична стрічка: дві нитки, що переплітаються «через одну» (над-під), між двома краями.
-// Візерунок повторюється, а не розтягується — тому стрічка тягнеться на будь-яку ширину.
-// Колір — з CSS-властивості `color` (currentColor). Розриви на перетинах малюються кольором фону сторінки.
-// Необов'язковий `text` — напис посередині, що розриває стрічку.
+// Two strands woven over-under between two edges; the pattern repeats, so the ribbon spans any width.
+// Gaps at crossings are drawn in the page background colour.
 export default function KnotRibbon({className, text}) {
     const id = useId()
     const patternId = `${id}-knot`
@@ -21,16 +19,16 @@ export default function KnotRibbon({className, text}) {
                         <rect x="12" y="0" width="16" height="24" />
                     </clipPath>
                     <pattern id={patternId} width="40" height="24" patternUnits="userSpaceOnUse">
-                        {/* Краї стрічки */}
+                        {/* Ribbon edges */}
                         <line x1="0" y1="1" x2="40" y2="1" stroke="currentColor" strokeWidth="2" />
                         <line x1="0" y1="23" x2="40" y2="23" stroke="currentColor" strokeWidth="2" />
 
-                        {/* Нитка A, поверх неї нитка B з «ореолом» кольору фону — B зверху на краях візерунка */}
+                        {/* Strand A, then strand B with a background-coloured halo: B is on top at the pattern edges */}
                         <path d={strandA} fill="none" stroke="currentColor" strokeWidth="2.5" />
                         <path d={strandB} fill="none" stroke="var(--color-bg)" strokeWidth="7" />
                         <path d={strandB} fill="none" stroke="currentColor" strokeWidth="2.5" />
 
-                        {/* У середині візерунка нитка A знову зверху — так виходить переплетення «над-під» */}
+                        {/* In the middle of the pattern strand A is on top again, giving the over-under weave */}
                         <g clipPath={`url(#${clipId})`}>
                             <path d={strandA} fill="none" stroke="var(--color-bg)" strokeWidth="7" />
                             <path d={strandA} fill="none" stroke="currentColor" strokeWidth="2.5" />

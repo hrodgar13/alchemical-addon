@@ -1,4 +1,3 @@
-/* Затемнення сторінки під вікном */
 .Backdrop {
     position: fixed;
     inset: 0;
@@ -12,7 +11,7 @@
     }
 }
 
-/* Шар на весь екран, що центрує вікно; якщо вміст вищий за екран — прокручується він, а не сторінка */
+/* Content taller than the screen scrolls the viewport, not the page */
 .Viewport {
     position: fixed;
     inset: 0;
@@ -23,7 +22,7 @@
     overflow-y: auto;
 }
 
-/* Фон вікна — колір сторінки: на ньому різьблена рамка виглядає так само, як на блоці зілля */
+/* Page background so the carved frame looks the same as on the potion block */
 .Popup {
     position: relative;
     isolation: isolate;

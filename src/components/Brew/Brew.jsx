@@ -4,13 +4,12 @@ import {usePotionBrew} from "../../hooks/usePotionBrew.js"
 import TriquetraSymbol from "./TriquetraSymbol.jsx"
 import styles from "./brew.module.css"
 
-// Скільки «кроків циклу» робить трикветр за одну варку: 120° — і символ знову виглядає так само
+// The triquetra has threefold symmetry, so a 120° turn per brew leaves it looking the same
 const TURN_DEGREES = 120
 
-// Збереження зілля на сервері — лише тут. Після варки форма очищається (місце варки лишається)
+// The only place a potion is saved. After brewing the recipe is cleared (the brewing place stays)
 export default function Brew() {
     const {canBrew, potion, brewPotion} = usePotionBrew()
-    // Кількість зварених зіль за сесію — від неї залежить поворот трикветра
     const [turns, setTurns] = useState(0)
 
     async function handleBrew() {

@@ -10,13 +10,13 @@ export default function Ingredients() {
 
     const areAllSlotsFilled = ingredients.every(item => item.ingredient !== null)
 
-    // До 3 інгредієнтів — вільно; 4-й — лише якщо всі три перетерті
+    // Up to 3 ingredients freely; a 4th only if all three are ground
     const canAddIngredient =
         areAllSlotsFilled &&
         (ingredients.length < MAX_UNGRIND ||
             (ingredients.length === MAX_UNGRIND && ingredients.every(item => item.ground)))
 
-    // При 4 інгредієнтах усі зобов'язані бути перетертими — змінювати перетирання не можна
+    // With 4 ingredients all must be ground, so grinding can't be toggled
     const isGroundLocked = ingredients.length === MAX_INGREDIENTS
 
     function handleAddNewIngredient() {

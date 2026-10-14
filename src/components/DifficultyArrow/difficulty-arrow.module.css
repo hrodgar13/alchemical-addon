@@ -1,7 +1,7 @@
 .DifficultyArrow {
     grid-column: 1/6;
     display: grid;
-    /* Бічні колонки завжди рівні — тому стрілка по центру, є повідомлення чи ні */
+    /* Equal side columns keep the arrow centred with or without a message */
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 24px;
@@ -22,7 +22,6 @@
     height: auto;
 }
 
-/* Хрест накладається на стрілку повністю */
 .Cross {
     position: absolute;
     inset: 0;
@@ -30,8 +29,7 @@
     height: 100%;
 }
 
-/* Число лежить поверх «стовбура» стрілки і поверх хреста.
-   Фон сторінки під цифрами — щоб лінії хреста не перетинали число */
+/* Page background behind the number so the cross lines don't strike through it */
 .Value {
     position: absolute;
     z-index: 1;

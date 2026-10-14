@@ -1,4 +1,3 @@
-// Стрілка вниз (контур). Колір — проп `color` або (за замовчуванням) CSS-властивість `color` батька через currentColor
 export default function ArrowDown({color = "currentColor", className}) {
     return (
         <svg className={className} viewBox="0 0 100 120" fill="none" aria-hidden="true">

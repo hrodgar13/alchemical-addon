@@ -1,6 +1,5 @@
-// Алхімічні символи основ: ключ (зберігається в основі як `symbol`) → латинська назва, руни й форма.
-// Окремий файл, бо його читають і BaseSymbol (малює), і форма основи (список для вибору),
-// а файл компонента для Fast Refresh має експортувати лише компоненти.
+// Base symbols: key (stored on a base as `symbol`) → Latin name, runes and shape.
+// Kept out of BaseSymbol.jsx because Fast Refresh requires component files to export only components.
 
 export const BASE_SYMBOLS = {
     aqua: {
@@ -35,5 +34,4 @@ export const BASE_SYMBOLS = {
     },
 }
 
-// Для селекта у формі: {id, name, rune}
 export const BASE_SYMBOL_OPTIONS = Object.entries(BASE_SYMBOLS).map(([id, {name, rune}]) => ({id, name, rune}))

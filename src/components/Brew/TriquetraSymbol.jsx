@@ -1,13 +1,10 @@
 import {useId} from "react"
 
 /*
- *  Трикветр, обведений колом з рун старшого футарку:
- *  «We are all gonna become ingredients for something new» — у тексту по колу немає ні початку, ні кінця.
- *  TH → ᚦ, NG → ᛜ; ᛫ — рунічний розділювач слів.
- *
- *  Трикветр — три дуги кіл радіуса 46 з центрами на відстані 27 від центру символу.
- *  Кожна дуга йде від вершини до вершини через середину; три перетини переплетені «над-під».
- *  Колір — currentColor.
+ *  Ring text in Elder Futhark: "We are all gonna become ingredients for something new"
+ *  (TH → ᚦ, NG → ᛜ, ᛫ is the word separator).
+ *  Triquetra: three arcs of radius 46 centred 27 from the symbol centre, running vertex to vertex;
+ *  the three crossings are woven over-under.
  * */
 const PHRASE = "ᚹᛖ᛫ᚨᚱᛖ᛫ᚨᛚᛚ᛫ᚷᛟᚾᚾᚨ᛫ᛒᛖᚲᛟᛗᛖ᛫ᛁᚾᚷᚱᛖᛞᛁᛖᚾᛏᛊ᛫ᚠᛟᚱ᛫ᛊᛟᛗᛖᚦᛁᛜ᛫ᚾᛖᚹ᛫"
 
@@ -17,7 +14,7 @@ const ARCS = [
     "M 0 -53.11 A 46 46 0 0 0 46 26.56",
 ]
 
-// На кожному перетині одна з дуг проходить зверху — так «над-під» чергується по всьому вузлу
+// At each crossing a different arc passes on top, so the weave alternates over-under
 const CROSSINGS = [
     {x: 22.62, y: -13.06, over: 1},
     {x: 0, y: 26.11, over: 2},
@@ -48,7 +45,7 @@ export default function TriquetraSymbol({className, style}) {
                     <path key={d} d={d} />
                 ))}
 
-                {/* Верхня дуга на перетині: «ореол» кольору фону ховає нижню, потім сама дуга */}
+                {/* Top arc at a crossing: a background-coloured halo hides the arc below, then the arc itself */}
                 {CROSSINGS.map((crossing, index) => (
                     <g key={index} clipPath={`url(#${id}-crossing-${index})`}>
                         <path d={ARCS[crossing.over]} stroke="var(--color-bg)" strokeWidth="11" />

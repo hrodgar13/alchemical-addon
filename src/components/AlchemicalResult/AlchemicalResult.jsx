@@ -37,7 +37,7 @@ export default function AlchemicalResult() {
         <div className={styles.AlchemicalResult}>
             <ul className={styles.IngredientsEffects}>
                 {base && <li>"{base.alchemicalWord}"</li>}
-                {/* Один рядок — один унікальний інгредієнт: однакові слоти вже складені разом */}
+                {/* One row per unique ingredient: identical slots are already merged */}
                 {ingredientEffects.map(effect => (
                     <IngredientEffect
                         key={effect.ingredient.id}

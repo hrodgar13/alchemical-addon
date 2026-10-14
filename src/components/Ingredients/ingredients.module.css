@@ -1,5 +1,5 @@
 .Ingredients {
-    /* position + isolation — щоб рамка з лози лягала під вміст блоку, але не під сторінку */
+    /* isolate: the z-index: -1 backdrop sits under the content but not under the page */
     position: relative;
     isolation: isolate;
     grid-column: 2/6;
@@ -8,7 +8,6 @@
     align-items: center;
     width: 100%;
     text-align: center;
-    /* Відступ від рамки, щоб вміст не налазив на лозу */
     padding: 32px 28px 28px;
     display: flex;
     flex-direction: column;
@@ -30,9 +29,6 @@
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 5px;
-}
-
-.IngredientTitle {
 }
 
 .subHeaderH4 {
@@ -58,7 +54,6 @@
     justify-content: space-between;
 }
 
-/* Селект інгредієнта й кнопка редагування поруч; селект займає все, що лишилось */
 .SelectRow {
     display: flex;
     align-items: center;
@@ -70,7 +65,6 @@
     }
 }
 
-/* Форма інгредієнта в модалці — відступи навколо дає саме вікно */
 .Form {
     display: flex;
     flex-direction: column;
@@ -78,7 +72,6 @@
     text-align: left;
 }
 
-/* Тип ефекту й одиниця часу — поряд; одиниця з'являється лише для часових */
 .FormRow {
     display: grid;
     grid-auto-flow: column;

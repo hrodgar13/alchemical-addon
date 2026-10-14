@@ -1,13 +1,10 @@
 import {useEffect, useReducer} from "react"
-import {
-    BASES,
-    BREWED_POTIONS,
-    FIELD_INSTRUMENTS,
-    INGREDIENT_RARITIES,
-    MOCK_INGREDIENTS,
-    STATION,
-} from "../../static/static.js"
+import {INGREDIENT_RARITIES} from "../../static/static.js"
 import {PotionComponentsContext} from "./potion-components-context.js"
+import {useAuth} from "../../hooks/useAuth.js"
+import {getBases, saveBase} from "../../api/bases.js"
+import {getIngredients, saveIngredient} from "../../api/ingredients.js"
+import {getBrewedPotions, saveBrewedPotion as saveBrewedPotionToDb} from "../../api/brewed-potions.js"
 
 const ACTION_LOADING = "loading"
 const BASE_LOADED = "base/loaded"
@@ -20,16 +17,15 @@ const BASE_SAVED = "base/saved"
 const INGREDIENT_SAVED = "ingredient/saved"
 
 const initialState = {
-    cookPlaces: [FIELD_INSTRUMENTS, STATION],
     bases: [],
     ingredients: [],
     ingredientRarities: INGREDIENT_RARITIES,
     brewedPotions: [],
-    isLoading: false,
+    // true from the start so an empty catalog doesn't flash before the first Firestore response
+    isLoading: true,
     errors: [],
 }
 
-// Збережений запис: відомий id — замінюємо на місці, новий — додаємо в кінець
 function upsertById(list, item) {
     const isExisting = list.some(listItem => listItem.id === item.id)
 
@@ -63,74 +59,69 @@ function reducer(state, action) {
 }
 
 function PotionComponentProvider({children}) {
-    const [{cookPlaces, bases, ingredients, ingredientRarities, brewedPotions, isLoading, errors}, dispatch] =
-        useReducer(reducer, initialState)
+    const [{bases, ingredients, ingredientRarities, brewedPotions, isLoading, errors}, dispatch] = useReducer(
+        reducer,
+        initialState,
+    )
+    // The provider lives on protected pages, but user is already null at the moment of logout
+    const uid = useAuth().user?.uid
 
     useEffect(() => {
-        dispatch({type: ACTION_LOADING})
+        if (!uid) return
 
-        async function fetchBases() {
-            try {
-                //TODO there will be fetch from API's
-                const data = BASES
-                dispatch({type: BASE_LOADED, payload: data})
-            } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Bases: ${err.message}`})
-            }
+        // If uid changes (sign-out and sign-in with another account), stale responses are ignored
+        let isCancelled = false
+
+        function dispatchIfActive(action) {
+            if (!isCancelled) dispatch(action)
         }
 
-        async function fetchIngredients() {
+        async function fetchCollection(fetcher, loadedType, label) {
             try {
-                //TODO there will be fetch from API's
-                const data = MOCK_INGREDIENTS
-                dispatch({type: INGREDIENTS_LOADED, payload: data})
+                dispatchIfActive({type: loadedType, payload: await fetcher(uid)})
             } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Ingredients: ${err.message}`})
-            }
-        }
-
-        async function fetchBrewedPotions() {
-            try {
-                //TODO there will be fetch from API's
-                const data = BREWED_POTIONS
-                dispatch({type: BREWED_POTIONS_LOADED, payload: data})
-            } catch (err) {
-                dispatch({type: ERROR, payload: `An Error occurred while fetching Brewed potions: ${err.message}`})
+                dispatchIfActive({type: ERROR, payload: `An Error occurred while fetching ${label}: ${err.message}`})
             }
         }
 
         async function fetchAll() {
-            await Promise.all([fetchBases(), fetchIngredients(), fetchBrewedPotions()])
-            dispatch({type: FINISHED})
+            dispatch({type: ACTION_LOADING})
+            await Promise.all([
+                fetchCollection(getBases, BASE_LOADED, "Bases"),
+                fetchCollection(getIngredients, INGREDIENTS_LOADED, "Ingredients"),
+                fetchCollection(getBrewedPotions, BREWED_POTIONS_LOADED, "Brewed potions"),
+            ])
+            dispatchIfActive({type: FINISHED})
         }
 
         fetchAll()
-    }, [])
 
-    async function saveBrewedPotion(potion) {
-        try {
-            //TODO there will be save to API (insert або update за id)
-            const savedPotion = {...potion, id: potion.id ?? crypto.randomUUID()}
-            dispatch({type: BREWED_POTION_SAVED, payload: savedPotion})
-        } catch (err) {
-            dispatch({type: ERROR, payload: `An Error occurred while saving Brewed potion: ${err.message}`})
+        return () => {
+            isCancelled = true
         }
+    }, [uid])
+
+    /*
+     *  Wait for Firestore before updating state, so the lists hold only what was really saved.
+     *  Errors aren't caught: the caller shows them (the form; a failed brew keeps the recipe).
+     *  Returns the saved record, with the Firestore id if it is new.
+     * */
+    async function saveBrewedPotion(potion) {
+        const savedPotion = await saveBrewedPotionToDb(uid, potion)
+        dispatch({type: BREWED_POTION_SAVED, payload: savedPotion})
+
+        return savedPotion
     }
 
-    // Помилку не ловимо: її показує форма, яка викликала збереження.
-    // Повертаємо збережену основу — з id, якщо вона нова
     async function addOrEditBase(base) {
-        //TODO there will be save to API
-        const savedBase = {...base, id: base.id ?? crypto.randomUUID()}
+        const savedBase = await saveBase(uid, base)
         dispatch({type: BASE_SAVED, payload: savedBase})
 
         return savedBase
     }
 
-    // Як addOrEditBase: помилку показує форма, повертаємо збережений інгредієнт
     async function addOrEditIngredient(ingredient) {
-        //TODO there will be save to API
-        const savedIngredient = {...ingredient, id: ingredient.id ?? crypto.randomUUID()}
+        const savedIngredient = await saveIngredient(uid, ingredient)
         dispatch({type: INGREDIENT_SAVED, payload: savedIngredient})
 
         return savedIngredient
@@ -139,7 +130,6 @@ function PotionComponentProvider({children}) {
     return (
         <PotionComponentsContext.Provider
             value={{
-                cookPlaces,
                 bases,
                 ingredients,
                 ingredientRarities,

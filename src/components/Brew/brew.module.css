@@ -1,5 +1,5 @@
 .Brew {
-    /* position + isolation — щоб трикветр на фоні лягав під кнопку, але не під сторінку */
+    /* isolate: the z-index: -1 backdrop sits under the content but not under the page */
     position: relative;
     isolation: isolate;
     grid-column: 5;
@@ -10,8 +10,7 @@
     padding: 20px;
 }
 
-/* Трикветр з рунічним колом — по центру, на фоні, як символи основи й дистиляції.
-   Після кожної варки повертається на 120° (кут задає Brew.jsx) */
+/* Rotates 120° after each brew; the angle comes from Brew.jsx */
 .Symbol {
     position: absolute;
     z-index: -1;

@@ -1,12 +1,9 @@
 import {useId} from "react"
 import styles from "./vine-frame.module.css"
 
-// Рамка з лози навколо блоку інгредієнтів з написом ᛦᚷᚷᛞᚱᚨᛋᛁᛚ угорі.
-// Кути — фіксованого розміру (не деформуються), краї — візерунок, що повторюється (не розтягується),
-// тому рамка підлаштовується під будь-який розмір блоку.
-// Колір — з CSS-властивості `color` (currentColor), тож працює в обох темах.
+// Fixed-size corners plus repeating-pattern edges let the frame fit any block size without distortion
 export default function VineFrame() {
-    // Унікальні id для <pattern> — щоб не конфліктували, якщо рамка буде на сторінці не одна
+    // Unique <pattern> ids so several frames on one page don't clash
     const id = useId()
     const horizontalPatternId = `${id}-vine-h`
     const verticalPatternId = `${id}-vine-v`
@@ -46,7 +43,7 @@ export default function VineFrame() {
     )
 }
 
-// Лівий верхній кут; інші кути — його дзеркальні відображення через CSS
+// Top-left corner; the other corners mirror it via CSS
 function VineCorner({className}) {
     return (
         <svg
@@ -58,13 +55,13 @@ function VineCorner({className}) {
             strokeLinecap="round"
             strokeLinejoin="round"
         >
-            {/* Основна лоза: вгору по лівому краю, заокруглення в куті, далі по верхньому */}
+            {/* Main vine: up the left edge, round the corner, along the top */}
             <path d="M 6 64 L 6 30 Q 6 6 30 6 L 64 6" />
 
-            {/* Вусик-завиток, що росте з кута всередину */}
+            {/* Tendril curling inward from the corner */}
             <path d="M 13 13 q 6 6 13 4 q 5 -2 2 -7 q -3 -3 -6 0" />
 
-            {/* Листки */}
+            {/* Leaves */}
             <path d="M 6 46 q 10 -2 12 -10 q -10 0 -12 10 Z" fill="currentColor" stroke="none" />
             <path d="M 46 6 q -2 10 -10 12 q 0 -10 10 -12 Z" fill="currentColor" stroke="none" />
             <path d="M 9 24 q 7 1 10 -4 q -7 -2 -10 4 Z" fill="currentColor" stroke="none" />

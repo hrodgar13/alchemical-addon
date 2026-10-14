@@ -1,5 +1,4 @@
-/* Підкладка кольору сторінки поверх дерева на фоні, з тією ж різьбленою рамкою, що й блок зілля.
-   position + isolation — щоб рамка (z-index: -1) лягла під вміст форми, але над деревом */
+/* isolate: the frame (z-index: -1) sits under the form content but above the tree background */
 .Form {
     position: relative;
     isolation: isolate;
@@ -18,6 +17,13 @@
     font-size: 22px;
     font-weight: 600;
     color: var(--color-header-text);
+}
+
+.Hint {
+    margin-top: -8px;
+    text-align: center;
+    color: var(--color-text-muted);
+    font-size: 14px;
 }
 
 .Error {
